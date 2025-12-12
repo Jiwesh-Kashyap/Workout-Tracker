@@ -160,16 +160,50 @@
     position: relative;
     /* margin-top: -5%; */
 }
+#table-header{
+    display: grid;
+    grid-template-columns:  40px 220px 90px 90px 130px;
+}
 .rows{
+    transition: grid-template-rows 1s ease-in-out;
+    display: grid;
+    grid-template-rows: 30px 1px 50px;
+}
+.rows-essential{
     display: grid;
     grid-template-columns: 40px 220px 90px 90px 130px;
+    height: 30px;
+}
+
+#line-div-action-cell{
+    border: rgba(255, 255, 255, 0.372) 1px dashed;
+    height: 1px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#line-div-action-cell.hide-hr{
+    display: none;
+}
+.action-cell{
+    display: grid;
+    grid-template-columns: 25% 25% 1fr;
+    transition: height 1s ease-in-out;
+    max-height: 50px;
+    place-items: center;
+}
+.rows.hide{
+    grid-template-rows: 30px 0px 0px;
+}
+.rows.hide .action-cell{
+    max-height: 0px;
+    min-height: 0px;
 }
 #output table{
     display: flex;
     flex-direction: column;
     border: 1px solid white;
     border-radius: 20px;
-    
 }
 td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
     display: flex;
@@ -196,52 +230,53 @@ td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
 .active-row{
     /* display: ; */
 }
+.div-done-img{
+    display: grid;
+    place-items: center;
+    position: relative;
+    /* cursor: pointer; */
+}
 .done{
-    /* grid-area: 2/3/3/4; */
-    /* place-self: center; */
-    /* transform: translateX(-100%); */
+    display: inline;
     cursor: pointer;
-    /* position: relative; */
-    position: absolute;
-    top: 40%;
-    left: 285px;
 }
 .done.hide{
-    display: none;
-}
-.completed.active{
-    display: flex;
-    position: absolute;
-    background-color: rgb(84, 84, 84);
-    border-radius: 5px;
-    border: white solid 2px ;
-    color: white;
-    top: 40%;
-    left:300px;
-    transition: opacity 0.5s ease-in-out;
-    opacity:100%;
+    animation: whoosh-animation 0.5s ease;
+    animation-fill-mode: forwards;
 }
 .completed{
-    z-index: 10;
     position: absolute;
+    transition: opacity 0.5s ease-in-out;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
     display: flex;
-    top: 50%;
-    right:0%;
     opacity: 0%;
     width: max-content;
+
+    padding: 2px 5px;
+    border: white solid 2px;
+    background-color: rgb(84, 84, 84);
+    border-radius: 5px;
+    color: white;
 }
+.completed.active{
+    opacity:100%;
+}
+
 .completed p{
     font-size: 0.5rem;
     font-family: monospace;
 }
 .delete{
-    grid-area: 2/3/3/4;
-    place-self: center;
-    transform: translateX(100%);
     cursor: pointer;
+    /* display: flex;
+    align-items: center; */
 }
 .delete.hide{
-    display:none;
+    animation: whoosh-animation 0.5s ease ;
+    animation-fill-mode: forwards;
 }
 .my-checkbox{
     background-color: rgb(0,0,0,0);
@@ -251,7 +286,21 @@ td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
     border: 1px solid white;
     cursor: pointer;
     transition: background-color 1s ease;
+    transition: box-shadow 0.5s ease;
+    box-shadow: none;
+    font-size: 1rem;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.work-sans-checker {
+    font-family: "Work Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+  }
 .my-checkbox:hover{
     box-shadow: rgb(112, 59, 165) 0 0 1px 2px;
 }
@@ -259,13 +308,18 @@ td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
     background-color: rgb(0, 102, 255);
 }
 .checker-list{
-    list-style: none;
     display: flex;
-    flex-direction: row;
+    column-gap: 5px;
+    justify-self: center;
+    list-style: none;
+    justify-content: center;
+    align-items: center;
     column-gap: 5px;
 }
 .checker-list.hide{
-    display: none;
+    animation: whoosh-animation 0.5s ease ;
+    animation-fill-mode: forwards;
+
 }
 .shaking{
     animation: shake-animation 0.5s;
@@ -318,4 +372,10 @@ td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
     75%{transform: translateX(3px);}
     100%{transform: translateX(0px);}
 /* is this related to the previous state */
+}
+@keyframes whoosh-animation {
+    0%{transform:scale(1)};
+    75%{max-height: 0;
+        margin-bottom: 0;}
+    100%{transform: scale(0);}
 }

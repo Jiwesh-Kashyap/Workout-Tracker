@@ -17,7 +17,7 @@ function CustomCheckBox({ind,func}){
         }
     }
 
-    const finalClassName = `my-checkbox ${(check)?`checked`:``} ${(isShaking)?`shaking`:``}`;
+    const finalClassName = `my-checkbox ${(check)?`checked`:``} ${(isShaking)?`shaking`:``} work-sans-checker`;
 
     return(<>
         <div className={finalClassName}
@@ -31,7 +31,7 @@ function CustomCheckBox({ind,func}){
             aria-checked={check}
             tabIndex="0"
             >
-                {check?"✓" : " "}
+                {check?"✓" : ind+1}
         </div>
     </>);
 }

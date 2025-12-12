@@ -2,18 +2,16 @@ import React, { useState } from 'react';
 import doneImg from './assets/done.png';
 
 function DoneImage({onCheckFunc, className}) {   //prop should be some function
-    const [isChecked, setIsChecked] = useState(false);
     const [display, setDisplay] = useState(false);
 
     function toggleDisplay(){
         setDisplay(!display);
     }
-    function handleClick(){
-        setIsChecked(true);
-        onCheckFunc(isChecked);
+    function handleClick(){ //call the parent function directly.
+        if(onCheckFunc) onCheckFunc();
     }
   return (
-    <div style={{position:'relative',display: 'inline-block' }}>
+    <div className='div-done-img'>
         <img src={doneImg} onMouseEnter={toggleDisplay}
             onMouseLeave={toggleDisplay} onClick={handleClick}
             className={className} alt="done" width="20"/>
