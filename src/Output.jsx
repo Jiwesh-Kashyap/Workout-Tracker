@@ -1,25 +1,9 @@
 import React, {useState, useRef, useEffect} from 'react';
-import DoneImage from './DoneImage';
-import DeleteImage from './DeleteImage';
-import Checker from './Checker';
+import Row from './Row';
 
 function Output({list}){
-    const [isFocused, setIsFocused] = useState(0);
-
-    const displayTable = 
-    list.map((item,i) => 
-        <tr className='rows' key={i}>
-            <td className='serial'>{i + 1}</td>
-            <td className='name-table'>{item.exercise}</td>
-            <td className='sets-table'>{item.sets}</td>
-            <td className='reps-table'>{item.reps}</td>
-            <td className='weights-table'>{item.weights}</td>
-            <DoneImage/>
-            <DeleteImage/>
-            <Checker sets={item.sets}/>
-        </tr>
-    );
-
+    // const [isFocused, setIsFocused] = useState(0);
+    
     return(<>
         <div id = "output">
             <h1>THE PLAN</h1>
@@ -27,7 +11,7 @@ function Output({list}){
             <table>
                 <caption className='table-name'>PLAN 1</caption>
                 <thead>
-                    <tr className='rows'>
+                    <tr id='table-header'>
                         <th className='serial'>#</th>
                         <th className='name-table'>Name</th>
                         <th className='sets-table'>Sets</th>
@@ -36,9 +20,13 @@ function Output({list}){
                         
                     </tr>
                 </thead>
+
                 <tbody>
-                    {displayTable}
+                    {list.map((item,i)=> (
+                        <Row key = {i} item={item} index = {i} />
+                    ))}
                 </tbody>
+
                 <tfoot>
                     {/* <tr id='end'>END</tr> */}
                 </tfoot>
