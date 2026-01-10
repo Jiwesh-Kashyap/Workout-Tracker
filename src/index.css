@@ -1,9 +1,22 @@
 :root {
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-image: url("set-tracker.jpg");
-  background-size: cover;
-  background-repeat: none;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-image: url("set-tracker.jpg");
+    background-size: cover;
+    background-repeat: none;
+    background-repeat: none;
+    --main-font: "Poppins", sans-serif;
+}
+
+body {
+    font-family: var(--main-font);
+    font-weight: 400;
+}
+
+.poppins-medium {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
 }
 
 .zalando-sans-semiexpanded-heading {
@@ -18,47 +31,64 @@
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: italic;
-  }
+}
+
 .racing-sans-one-regular {
     font-family: "Racing Sans One", sans-serif;
     font-weight: 400;
     font-style: normal;
-}  
+}
+
 .sansation-regular-italic {
     font-family: "Sansation", sans-serif;
     font-weight: 500;
     font-style: normal;
-  }
-#layout{
+}
+
+#layout {
     display: grid;
     grid-template-columns: 1fr 10px 1fr;
     grid-template-rows: auto;
     height: fit-content;
     /* backdrop-filter: brightness(50%); */
 }
-#input{
-    display:grid;
+
+#input {
+    display: grid;
     grid-template-columns: auto 1fr;
     row-gap: 20px;
-    grid-template-rows: repeat(6,auto-fit);
+    grid-template-rows: repeat(7, auto-fit);
     column-gap: 20px;
 }
-#output{
+
+#input-header {
+    grid-column: 1 / 4;
+    justify-self: center;
+}
+
+#input form {
+    display: contents;
+}
+
+#output {
     display: flex;
     margin-left: 20px;
     flex-direction: column;
     align-items: center;
 }
-#output table{
+
+#output table {
     font-size: 1.3rem;
 }
-#divider{   
+
+#divider {
     /* hr */
     position: relative;
     left: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.739) ;
+    border: 1px solid rgba(255, 255, 255, 0.739);
 }
-#heading{
+
+#heading {
     font-size: 1.5rem;
     width: 100vw;
     height: 100px;
@@ -67,24 +97,30 @@
     align-items: center;
     justify-content: center;
 }
-#curve{
+
+#curve {
     display: block;
     width: 100%;
 }
-#heading h1{
+
+#heading h1 {
     display: flex;
     justify-content: center;
 }
-#input label{
+
+#input label {
     display: inline-block;
-    /* width: fit-content; */
+    width: fit-content;
     font-size: 1.2rem;
-    border: none;
+    border: 2px solid rgba(36, 9, 62, 0.8);
     border-radius: 10px;
-    backdrop-filter:blur(3px) brightness(90%);
-    -webkit-backdrop-filter: blur(3px); /* For Safari support */
+    padding: 5px;
+    background-color: rgba(36, 9, 62, 0.5);
+    /* backdrop-filter: blur(3px) brightness(80%); */
+    /* -webkit-backdrop-filter: blur(3px); */
 }
-#input input{
+
+#input input[type="text"] {
     height: 70%;
     font-size: 1.2rem;
     border-radius: 10px;
@@ -94,157 +130,254 @@
     /* min-width: 200px; */
     /* width:min-content; */
 }
-#input input:focus, select:focus, textarea:focus{
+
+#input h3 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+}
+
+#input input:focus,
+select:focus,
+textarea:focus {
     outline-offset: 0px;
     outline: none;
-    border: 2px solid rgba(145, 28, 255, 0.978); /* A blue border */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* A soft blue glow */
+    border: 2px solid rgba(145, 28, 255, 0.978);
+    /* A blue border */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    /* A soft blue glow */
 }
-.enter-button{
-    grid-area: 6/1/7/4;
+
+
+
+.error-msg {
+    grid-column: 2 / 4;
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-top: -15px;
+    /* Pull it up closer to input */
+    margin-bottom: 5px;
 }
-.input-button, .enter-button{
+
+.enter-button {
+    grid-column: 1 / 4;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.input-button,
+.enter-button {
     background-color: rgba(36, 9, 62, 0.474);
-    height: 25px;
+    height: 40px;
     color: white;
     border: 1px solid rgba(36, 9, 62, 0.474);
     border-radius: 10px;
     position: relative;
-    top:30%;
+    top: 30%;
     cursor: pointer;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    font-family: "Poppins";
 }
-#label-of-weight{
+
+#label-of-weight {
     display: grid;
-    grid-template-columns: repeat(4,auto);
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
     column-gap: 20px;
 }
-#label-of-weight .input-box{
+
+#label-of-weight .selector {
+    display: flex;
+    place-items: center;
+    gap: 10px;
+}
+
+#label-of-weight .selector label {
+    margin-bottom: 0px;
+}
+
+#label-of-weight .input-box {
     width: 20px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#label-of-weight label{
+
+#label-of-weight label {
     font-size: 1.2rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.amount-slider{
+
+.amount-slider {
     opacity: 0;
-    grid-area: 5/1/6/4;
+    grid-column: 1 / 4;
     display: grid;
     position: relative;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-rows: auto;
+    grid-template-columns: 0.3fr auto 0.6fr;
     column-gap: 20px;
     align-items: center;
     transition: opacity 1s ease;
 }
-.amount-slider.active{
+
+#is-weighted{
+    display: flex;
+    flex-direction: rows;
+    justify-content: space-between;
+}
+#weight-label{
+    width: max-content;
+}
+#weight-unit{
+    width: max-content;
+}
+.amount-slider.active {
     opacity: 100;
 }
-.amount-slider label{
-    font-size: 1.2rem;
-    width: 165px;
+/* .amount-slider>button>img{
+    height: 10px;
+} */
+.control-weight{
+    height: 15px;
+    transition: height 0.3s ease;
 }
-#add-button{
+.control-weight:hover{
+    height: 14px;
+}
+.amount-slider label {
+    font-size: 1.1rem;
+    width: 185px;
+}
+.amount-slider-controls{
+    grid-column: 3/4;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 30px;
+    place-items: center;
+}
+/* #add-button {
     grid-area: 1/4/2/5;
 }
-#reduce-button{
+
+#reduce-button {
     grid-area: 1/2/2/3;
-}
-#slider{
+} */
+
+/* #slider {
     grid-column: 1/3/2/4;
     position: relative;
     /* margin-top: -5%; */
+#slider{
+    width: 250px;
 }
-#table-header{
+
+#table-header {
     display: grid;
-    grid-template-columns:  40px 220px 90px 90px 130px;
+    grid-template-columns: 40px 220px 90px 90px 130px;
 }
-.rows{
+
+.rows {
     transition: grid-template-rows 1s ease-in-out;
     display: grid;
     grid-template-rows: 30px 1px 50px;
 }
-.rows-essential{
+
+.rows-essential {
     display: grid;
     grid-template-columns: 40px 220px 90px 90px 130px;
     height: 30px;
 }
 
-#line-div-action-cell{
+#line-div-action-cell {
     border: rgba(255, 255, 255, 0.372) 1px dashed;
     height: 1px;
     width: 100%;
     display: flex;
     flex-direction: column;
 }
-#line-div-action-cell.hide-hr{
+
+#line-div-action-cell.hide-hr {
     display: none;
 }
-.action-cell{
+
+.action-cell {
     display: grid;
     grid-template-columns: 25% 25% 1fr;
     transition: height 1s ease-in-out;
     max-height: 50px;
     place-items: center;
 }
-.rows.hide{
+
+.rows.hide {
     grid-template-rows: 30px 0px 0px;
 }
-.rows.hide .action-cell{
+
+.rows.hide .action-cell {
     max-height: 0px;
     min-height: 0px;
 }
-#output table{
+
+#output table {
     display: flex;
     flex-direction: column;
     border: 1px solid white;
     border-radius: 20px;
 }
-td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
+
+td.serial,
+td.sets-table,
+td.reps-table,
+td.weights-table,
+td.name-table {
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     position: relative;
 }
-#output tr{
+
+#output tr {
     border-radius: 20px;
 }
-#output table:not(:first-child, :last-child){
+
+#output table:not(:first-child, :last-child) {
     border: 1px solid white;
 }
-#output table:first-of-type{
+
+#output table:first-of-type {
     border-bottom: 1px solid white;
 }
-#output table tr:last-of-type{
+
+#output table tr:last-of-type {
     border-top: 1px solid white;
 }
-#output tbody tr:nth-of-type(odd){
+
+#output tbody tr:nth-of-type(odd) {
     background-color: rgba(36, 9, 62, 0.474);
 }
-.active-row{
-    /* display: ; */
-}
-.div-done-img{
+
+.div-done-img {
     display: grid;
     place-items: center;
     position: relative;
     /* cursor: pointer; */
 }
-.done{
+
+.done {
     display: inline;
     cursor: pointer;
 }
-.done.hide{
+
+.done.hide {
     animation: whoosh-animation 0.5s ease;
     animation-fill-mode: forwards;
 }
-.completed{
+
+.completed {
     position: absolute;
     transition: opacity 0.5s ease-in-out;
     top: 100%;
@@ -261,25 +394,29 @@ td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
     border-radius: 5px;
     color: white;
 }
-.completed.active{
-    opacity:100%;
+
+.completed.active {
+    opacity: 100%;
 }
 
-.completed p{
+.completed p {
     font-size: 0.5rem;
     font-family: monospace;
 }
-.delete{
+
+.delete {
     cursor: pointer;
     /* display: flex;
     align-items: center; */
 }
-.delete.hide{
-    animation: whoosh-animation 0.5s ease ;
+
+.delete.hide {
+    animation: whoosh-animation 0.5s ease;
     animation-fill-mode: forwards;
 }
-.my-checkbox{
-    background-color: rgb(0,0,0,0);
+
+.my-checkbox {
+    background-color: rgb(0, 0, 0, 0);
     width: 20px;
     height: 20px;
     border-radius: 100%;
@@ -300,14 +437,17 @@ td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
     font-optical-sizing: auto;
     font-weight: 200;
     font-style: normal;
-  }
-.my-checkbox:hover{
+}
+
+.my-checkbox:hover {
     box-shadow: rgb(112, 59, 165) 0 0 1px 2px;
 }
-.my-checkbox.checked{
+
+.my-checkbox.checked {
     background-color: rgb(0, 102, 255);
 }
-.checker-list{
+
+.checker-list {
     display: flex;
     column-gap: 5px;
     justify-self: center;
@@ -316,46 +456,55 @@ td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
     align-items: center;
     column-gap: 5px;
 }
-.checker-list.hide{
-    animation: whoosh-animation 0.5s ease ;
+
+.checker-list.hide {
+    animation: whoosh-animation 0.5s ease;
     animation-fill-mode: forwards;
 
 }
-.shaking{
+
+.shaking {
     animation: shake-animation 0.5s;
     border-color: red !important;
     box-shadow: red 0 0 1px 1px;
 }
-#end{
+
+#end {
     display: flex;
     justify-content: center;
 }
+
 @media (max-width: 900px) {
-    #layout{
+    #layout {
         display: grid;
         grid-template-columns: auto;
         height: fit-content;
     }
+
     /* ADD THIS PART */
     #input {
         /* This stacks the label/input/button in a single column */
-        grid-template-columns: 1fr; 
-        row-gap: 10px; /* Tighter gap for mobile */
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+        /* Tighter gap for mobile */
     }
-    #divider{   
+
+    #divider {
         /* hr */
         position: relative;
         width: 100%;
-        border: 1px solid rgba(255, 255, 255, 0.739) ;
+        border: 1px solid rgba(255, 255, 255, 0.739);
     }
+
     /* And this part */
-    #input input {
-        min-width: 0; /* Let the input shrink */
-        width: 100%; /* Make the input fill the screen */
+    #input input[type="text"] {
+        min-width: 0;
+        width: 100%;
     }
+
     .enter-button {
-        width: 100%; /* Make the button fill the screen */
-        top: 0; /* Reset the 'top' positioning */
+        width: 100%;
+        top: 0;
     }
 
     #label-of-weight {
@@ -365,17 +514,41 @@ td.serial, td.sets-table, td.reps-table,td.weights-table, td.name-table{
     }
 }
 
-@keyframes shake-animation{
-    0% {transform: translateX(0px);}
-    25%{transform: translateX(-5px);}
-    50%{transform: translateX(0px);}
-    75%{transform: translateX(3px);}
-    100%{transform: translateX(0px);}
-/* is this related to the previous state */
+@keyframes shake-animation {
+    0% {
+        transform: translateX(0px);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(0px);
+    }
+
+    75% {
+        transform: translateX(3px);
+    }
+
+    100% {
+        transform: translateX(0px);
+    }
+
+    /* is this related to the previous state */
 }
+
 @keyframes whoosh-animation {
-    0%{transform:scale(1)};
-    75%{max-height: 0;
-        margin-bottom: 0;}
-    100%{transform: scale(0);}
+    0% {
+        transform: scale(1)
+    }
+
+    75% {
+        max-height: 0;
+        margin-bottom: 0;
+    }
+
+    100% {
+        transform: scale(0);
+    }
 }

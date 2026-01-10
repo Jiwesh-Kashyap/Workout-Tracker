@@ -10,7 +10,6 @@ function Checker({sets,className, onComplete}){
     for(let i=0; i<sets; i++){
         list.push(i);
     }
-    
 
     function isValidCheck(ind){
         if(cnt==sets){

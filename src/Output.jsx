@@ -1,7 +1,4 @@
 import React, {useState, useRef, useEffect} from 'react';
-import DoneImage from './DoneImage';
-import DeleteImage from './DeleteImage';
-import Checker from './Checker';
 import Row from './Row';
 
 function Output({list}){
