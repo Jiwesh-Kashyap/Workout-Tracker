@@ -3,7 +3,10 @@ import Row from './Row';
 
 function Output({list}){
     // const [isFocused, setIsFocused] = useState(0);
-    
+    const [isComplete, setIsComplete] = useState(false);
+    const handleComplete = (isComplete) => {
+
+    }
     return(<>
         <div id = "output">
             <h1>THE PLAN</h1>
