@@ -16,9 +16,13 @@ const workoutSchema = mongoose.Schema({
     weight: {
         type: Number,
         required: true
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
     }
-}, {timestamp: true});
+}, {timestamps: true});
 
-const workoutModel = mongoose.model('exercise', workoutSchema);
+const workoutModel = mongoose.model('workout', workoutSchema);
 
 module.exports = workoutModel;
