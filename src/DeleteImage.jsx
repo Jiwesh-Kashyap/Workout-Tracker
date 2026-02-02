@@ -1,16 +1,16 @@
 import React,{useState} from 'react';
 import deleteImg from './assets/delete.png';
 
-function DeleteImage({className}) {
+function DeleteImage({className, onDelFunc}) {
     const [display, setDisplay] = useState(false);
-    const [click, setClick] = useState(false);
 
     function toggleDisplay(){
         setDisplay(!display);
     }
     function handleClick(){
-        // setClick(true);
+        onDelFunc();
     }
+
 
   return (
     <div className='div-done-img'>

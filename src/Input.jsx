@@ -13,9 +13,15 @@ function Input({ onAddExercise }) {
         formState: { errors, isSubmitting },
     } = useForm({
         defaultValues: {
+            exerciseName: "",
+            sets: "",
+            reps: "",
             weights: 50
         },
         resolver: zodResolver(workoutSchema), // Connects Zod to React Hook Form
+        mode: 'onTouched', // Only validate after user has interacted with the field
+        reValidateMode: 'onChange', // Re-validate on change after first validation
+        shouldFocusError: false, // Don't auto-focus on error
     });
 
     // Register weights manually
@@ -25,7 +31,7 @@ function Input({ onAddExercise }) {
 
     const [weights, setWeights] = useState(50);
     const [isWeighted, setIsWeighted] = useState(true);
-    // const [active, setActive] = useState(false);
+    const [resetKey, setResetKey] = useState(0);
 
     function handleRadio(e) {
         if (e.target.id === "weighted") {
@@ -41,30 +47,49 @@ function Input({ onAddExercise }) {
     // const handleEnter = (){
 
     // }
-    const onSubmit = async (data) => {//only runs upon validation
+    const onSubmit = async (data) => {
+        console.log("Submitting data:", data);
         const finalData = {
             ...data,
-            weights: isWeighted ? weights : "Body Weight"
+            weights: isWeighted ? weights : "NULL"
         };
-        onAddExercise(finalData);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        reset();    //clears text input
-        reset();    //clears text input
-        setWeights(50);
-        setValue("weights", 50);
+        try {
+            await onAddExercise(finalData);
+            // Reset form with proper default values - use empty string for number inputs to ensure DOM clears
+            reset({
+                exerciseName: "",
+                sets: "",
+                reps: "",
+                weights: 50
+            }, {
+                keepErrors: false, // Clear all errors
+                keepDirty: false,  // Reset dirty state
+                keepIsSubmitted: false, // Reset submitted state
+                keepTouched: false, // Reset touched state
+                keepIsValid: false, // Reset valid state
+                keepSubmitCount: false // Reset submit count
+            });
+            setWeights(50);
+            setIsWeighted(true);
+            setValue("weights", 50);
+            // Force re-render to clear DOM inputs
+            setResetKey(prev => prev + 1);
+        } catch (error) {
+            console.error("Error in onAddExercise:", error);
+        }
     };
+
     return (
         <div id='input'>
             <h2 id='input-header'>Log the exercise</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form key={resetKey} onSubmit={handleSubmit(onSubmit)}>
 
                 {/* Name */}
                 <label htmlFor="name">
                     <h3>Name of exercise: </h3>
                 </label>
                 <input {...register("exerciseName")} placeholder='Bench Press'
-                    type="text" id="name" className='input-box' />
+                    type="text" id="name" className='input-box' defaultValue="" />
                 {errors.exerciseName && (
                     <p className="error-msg">{errors.exerciseName.message}</p>
                 )}
@@ -73,8 +98,8 @@ function Input({ onAddExercise }) {
                 <label htmlFor="sets">
                     <h3>Num of Sets: </h3>
                 </label>
-                <input  {...register("sets")} placeholder='3'
-                    type="text" id="sets" className='input-box' />
+                <input  {...register("sets", { valueAsNumber: true })} placeholder='3'
+                    type="number" id="sets" className='input-box' defaultValue="" />
                 {errors.sets && (
                     <p className="error-msg">{errors.sets.message}</p>
                 )}
@@ -83,8 +108,8 @@ function Input({ onAddExercise }) {
                 <label htmlFor="reps">
                     <h3>Num of reps: </h3>
                 </label>
-                <input  {...register("reps")} placeholder='8'
-                    type="text" id="reps" className='input-box' />
+                <input  {...register("reps", { valueAsNumber: true })} placeholder='8'
+                    type="number" id="reps" className='input-box' defaultValue="" />
                 {errors.reps && (
                     <p className="error-msg">{errors.reps.message}</p>
                 )}
@@ -106,7 +131,6 @@ function Input({ onAddExercise }) {
                         <label htmlFor="body-weight">Body weight</label>
                     </div>
                 </div>
-                <br />
 
                 <div className={`amount-slider ${isWeighted ? 'active' : 'hidden'}`}>
                     <AmountSlider sliderVal={weights} setSliderVal={(val) => {
@@ -120,7 +144,7 @@ function Input({ onAddExercise }) {
                     type='submit'
                     disabled={isSubmitting}
                     style={{ marginTop: '20px' }}
-                    // onClick={handleEnter}
+                // onClick={handleEnter}
                 >
                     {isSubmitting ? "Saving..." : "Add Workout"}
                 </button>

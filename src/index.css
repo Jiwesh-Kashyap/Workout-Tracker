@@ -1,16 +1,46 @@
 :root {
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-image: url("set-tracker.jpg");
-    background-size: cover;
-    background-repeat: none;
-    background-repeat: none;
+    /* Removed color-scheme to prevent default browser dark mode overrides */
     --main-font: "Poppins", sans-serif;
 }
 
 body {
+    margin: 0;
+    min-height: 100vh;
     font-family: var(--main-font);
     font-weight: 400;
+    color: rgba(255, 255, 255, 0.87);
+
+    /* Background Styles */
+    background-color: #242424;
+    /* Fallback */
+    background-image: url("./set-tracker.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+    /* Disable native smooth scroll so Lenis takes over */
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+    pointer-events: none;
+    /* Performance hack: stops iframes from lagging while scrolling */
 }
 
 .poppins-medium {
@@ -62,7 +92,7 @@ body {
 }
 
 #input-header {
-    grid-column: 1 / 4;
+    grid-column: 1 / -1;
     justify-self: center;
 }
 
@@ -120,13 +150,14 @@ body {
     /* -webkit-backdrop-filter: blur(3px); */
 }
 
-#input input[type="text"] {
+#input input[type="text"],
+#input input[type="number"] {
     height: 70%;
     font-size: 1.2rem;
     border-radius: 10px;
     position: relative;
     top: 10%;
-    grid-column: 2/4;
+    grid-column: 2;
     /* min-width: 200px; */
     /* width:min-content; */
 }
@@ -150,7 +181,7 @@ textarea:focus {
 
 
 .error-msg {
-    grid-column: 2 / 4;
+    grid-column: 2;
     color: #ff6b6b;
     font-size: 0.9rem;
     margin-top: -15px;
@@ -159,7 +190,7 @@ textarea:focus {
 }
 
 .enter-button {
-    grid-column: 1 / 4;
+    grid-column: 1 / -1;
     width: 100%;
     margin-top: 20px;
 }
@@ -185,6 +216,7 @@ textarea:focus {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
     column-gap: 20px;
+    grid-column: 2;
 }
 
 #label-of-weight .selector {
@@ -214,7 +246,7 @@ textarea:focus {
 
 .amount-slider {
     opacity: 0;
-    grid-column: 1 / 4;
+    grid-column: 1 / -1;
     display: grid;
     position: relative;
     grid-template-rows: auto;
@@ -224,41 +256,49 @@ textarea:focus {
     transition: opacity 1s ease;
 }
 
-#is-weighted{
+#is-weighted {
     display: flex;
     flex-direction: rows;
     justify-content: space-between;
 }
-#weight-label{
+
+#weight-label {
     width: max-content;
 }
-#weight-unit{
+
+#weight-unit {
     width: max-content;
 }
+
 .amount-slider.active {
     opacity: 100;
 }
+
 /* .amount-slider>button>img{
     height: 10px;
 } */
-.control-weight{
+.control-weight {
     height: 15px;
     transition: height 0.3s ease;
 }
-.control-weight:hover{
+
+.control-weight:hover {
     height: 14px;
 }
+
 .amount-slider label {
     font-size: 1.1rem;
     width: 185px;
 }
-.amount-slider-controls{
+
+.amount-slider-controls {
     grid-column: 3/4;
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-template-rows: 30px;
     place-items: center;
 }
+
 /* #add-button {
     grid-area: 1/4/2/5;
 }
@@ -271,7 +311,7 @@ textarea:focus {
     grid-column: 1/3/2/4;
     position: relative;
     /* margin-top: -5%; */
-#slider{
+#slider {
     width: 250px;
 }
 
@@ -283,21 +323,30 @@ textarea:focus {
 .rows {
     transition: grid-template-rows 1s ease-in-out;
     display: grid;
+    grid-template-columns: 40px 220px 90px 90px 130px 1px auto;
     grid-template-rows: 30px 1px 50px;
 }
 
 .rows-essential {
-    display: grid;
-    grid-template-columns: 40px 220px 90px 90px 130px;
-    height: 30px;
+    display: contents;
+}
+
+.separator-cell {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    border: rgba(255, 255, 255, 0.372) 1px dashed;
+    height: 1px;
+    width: 100%;
+}
+
+.separator-cell.hide-hr {
+    display: none;
 }
 
 #line-div-action-cell {
     border: rgba(255, 255, 255, 0.372) 1px dashed;
     height: 1px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
 #line-div-action-cell.hide-hr {
@@ -310,6 +359,8 @@ textarea:focus {
     transition: height 1s ease-in-out;
     max-height: 50px;
     place-items: center;
+    grid-row: 3;
+    grid-column: 1 / -1;
 }
 
 .rows.hide {
@@ -338,6 +389,27 @@ td.name-table {
     justify-content: center;
     align-items: center;
     position: relative;
+    grid-row: 1;
+}
+
+td.serial {
+    grid-column: 1;
+}
+
+td.name-table {
+    grid-column: 2;
+}
+
+td.sets-table {
+    grid-column: 3;
+}
+
+td.reps-table {
+    grid-column: 4;
+}
+
+td.weights-table {
+    grid-column: 5;
 }
 
 #output tr {
@@ -415,6 +487,29 @@ td.name-table {
     animation-fill-mode: forwards;
 }
 
+.delete-warning {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(36, 9, 62, 0.474);
+    border: white 2px solid;
+    border-radius: 10px;
+}
+
+.delete-warning #delete-button {
+    background-color: #f91818;
+    color: #df0303;
+    text-shadow: #ff6b6b;
+    border-radius: 5px;
+    border: #df0303 1px #ff2f00;
+}
+
+.delete-warning #cancel-button {
+    background-color: beige;
+    color: black;
+}
+
 .my-checkbox {
     background-color: rgb(0, 0, 0, 0);
     width: 20px;
@@ -474,6 +569,56 @@ td.name-table {
     justify-content: center;
 }
 
+.footer {
+    background-color: rgb(10, 10, 10);
+    position: relative;
+}
+
+.footer-child {
+    display: grid;
+    padding-top: 20px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.4fr 1fr 0.4fr;
+    place-items: center;
+    height: 80px;
+    margin-top: 20px;
+    position: relative;
+    bottom: 0px;
+    width: 100%;
+}
+
+.handles {
+    width: 70%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.greet {
+    grid-column: 1/4;
+    padding-bottom: 10px;
+}
+
+.made-by {
+    position: absolute;
+    bottom: -10px;
+    display: flex;
+    flex-direction: row;
+    column-gap: 4px;
+    right: 5px;
+}
+
+.made-by #pre-name {
+    place-content: center;
+    font-family: "Kalam", sans-serif;
+    font-size: 0.7rem;
+}
+
+.made-by #name {
+    font-size: 0.81rem;
+    font-family: var(--main-font);
+    color: #F9CF17;
+}
+
 @media (max-width: 900px) {
     #layout {
         display: grid;
@@ -481,7 +626,6 @@ td.name-table {
         height: fit-content;
     }
 
-    /* ADD THIS PART */
     #input {
         /* This stacks the label/input/button in a single column */
         grid-template-columns: 1fr;
@@ -496,10 +640,11 @@ td.name-table {
         border: 1px solid rgba(255, 255, 255, 0.739);
     }
 
-    /* And this part */
-    #input input[type="text"] {
+    #input input[type="text"],
+    #input input[type="number"] {
         min-width: 0;
         width: 100%;
+        grid-column: 1;
     }
 
     .enter-button {
