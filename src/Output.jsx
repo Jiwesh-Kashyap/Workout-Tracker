@@ -1,11 +1,23 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React from 'react';
 import Row from './Row';
 
 function Output({list}){
     // const [isFocused, setIsFocused] = useState(0);
-    const [isComplete, setIsComplete] = useState(false);
-    const handleComplete = (isComplete) => {
+    // const [isComplete, setIsComplete] = useState(false);
+    // const handleComplete = (isComplete) => {
 
+    // }
+    const handleDelete = async ()=>{
+        const response = await fetch('http://localhost:4000/api/workouts',{
+            method: "DELETE",
+        });
+        if(response.ok){
+            //a pop up of successfull deletion
+            console.log('Successfully Deleted the exercise!');
+        }
+        else{
+            console.log("Error while deleting exercise!");
+        }
     }
     return(<>
         <div id = "output">
@@ -26,7 +38,7 @@ function Output({list}){
 
                 <tbody>
                     {list.map((item,i)=> (
-                        <Row key = {i} item={item} index = {i} />
+                        <Row key = {i} item={item} index = {i} handleDelete={handleDelete}/>
                     ))}
                 </tbody>
 

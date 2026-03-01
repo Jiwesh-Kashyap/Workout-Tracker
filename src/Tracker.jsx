@@ -58,7 +58,7 @@ function Tracker() {
             const response = await fetch('http://localhost:4000/api/workouts', {
                 method: 'POST',
                 credentials: 'include',
-                body: JSON.stringify(workoutData),
+                body: JSON.stringify(workoutData), 
                 headers: {
                     'Content-Type': 'application/json'
                 }

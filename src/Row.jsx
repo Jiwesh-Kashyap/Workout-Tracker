@@ -3,7 +3,7 @@ import DoneImage from "./DoneImage";
 import DeleteImage from "./DeleteImage";
 import Checker from "./Checker";
 
-function Row({ item, index }) {
+function Row({ item, index, handleDelete }) {
     const [isCompleted, setIsCompleted] = useState(false);
     const [isDeleted, setIsDeleted] = useState(false);
 
@@ -14,12 +14,14 @@ function Row({ item, index }) {
     function handleComplete() {
         setIsCompleted(true);
     }
-    function handleDelete(){
+    function onDelete(){
+        handleDelete();
         setIsDeleted(true);
     }
+    const finalClassName = `rows ${isCompleted ? 'completed' : ''} ${isDeleted? 'deleted': ''}`;
 
     return (
-        <tr className={`rows ${isCompleted ? 'hide' : ''}`}>
+        <tr className={finalClassName}>
             <td className='serial'>{index + 1}</td>
             <td className='name-table'>{item.exerciseName}</td>
             <td className='sets-table'>{item.numOfSets}</td>
@@ -29,7 +31,7 @@ function Row({ item, index }) {
             {/* We pass the handleComplete function down */}
             <td className='action-cell'>
                 <DoneImage className={doneClass} onCheckFunc={handleComplete} />
-                <DeleteImage className={deleteClass} onDelFunc={handleDelete}/>
+                <DeleteImage className={deleteClass} onDelFunc={onDelete}/>
                 <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete} />
             </td>
         </tr>

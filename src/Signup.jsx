@@ -19,8 +19,9 @@ export default function Signin() {
                 },
                 body: JSON.stringify({ name, email, password }),
             });
-
             if (response.ok) {
+                await response.json();
+                localStorage.setItem("userName", name);
                 navigate("/");
             } else {
                 const data = await response.json();
