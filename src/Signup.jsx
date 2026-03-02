@@ -11,7 +11,7 @@ export default function Signin() {
         e.preventDefault(); // Prevent default HTML form submission
 
         try {
-            const response = await fetch("http://localhost:4000/api/user/signup", {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user/signup`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
