@@ -14,8 +14,8 @@ function Row({ item, index, handleDelete }) {
     function handleComplete() {
         setIsCompleted(true);
     }
-    function onDelete(){
-        handleDelete();
+    function onDelete(workoutName) {
+        handleDelete(workoutName);
         setIsDeleted(true);
     }
     const finalClassName = `rows ${isCompleted ? 'completed' : ''} ${isDeleted? 'deleted': ''}`;
@@ -31,7 +31,7 @@ function Row({ item, index, handleDelete }) {
             {/* We pass the handleComplete function down */}
             <td className='action-cell'>
                 <DoneImage className={doneClass} onCheckFunc={handleComplete} />
-                <DeleteImage className={deleteClass} onDelFunc={onDelete}/>
+                <DeleteImage className={deleteClass} onDelFunc={()=>onDelete(item.exerciseName)}/>
                 <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete} />
             </td>
         </tr>

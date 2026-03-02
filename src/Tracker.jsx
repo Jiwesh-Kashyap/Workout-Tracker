@@ -6,7 +6,7 @@ import Output from './Output';
 import Footer from './Footer';
 
 function Tracker() {
-    const [exercise, setExercise] = useState([]);
+    const [plan, setPlan] = useState([]);
 
     useEffect(() => {
         const fetchWorkouts = async () => {
@@ -16,7 +16,7 @@ function Tracker() {
                 });
                 if (response.ok) {
                     const json = await response.json();
-                    setExercise(json);
+                    setPlan(json);
                 }
             } catch (error) {
                 console.error("Failed to fetch workouts:", error);
@@ -68,13 +68,16 @@ function Tracker() {
 
             if (response.ok) {
                 console.log("Backend save success:", json);
-                setExercise(current => [...current, json]);
+                setPlan(current => [...current, json]);
             } else {
                 console.error("Failed to add workout (backend error):", json);
             }
         } catch (error) {
             console.error("Network or Fetch Error:", error);
         }
+    }
+    function deleteExercise(workoutName){
+        setPlan(c => c.filter((row) => row.exerciseName!==workoutName));
     }
     return (
         <>
@@ -96,7 +99,7 @@ function Tracker() {
             <div id="layout">
                 <Input onAddExercise={addExercise} />
                 <hr id="divider" />
-                <Output list={exercise} />
+                <Output list={plan} onDelete={(workoutName) => deleteExercise(workoutName)}/>
             </div>
             <Footer />
         </>

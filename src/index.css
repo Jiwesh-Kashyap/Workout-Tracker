@@ -346,7 +346,6 @@ textarea:focus {
     grid-template-columns: 40px 220px 90px 90px 130px 1px auto;
     grid-template-rows: 30px 1px 50px;
 }
-
 .rows-essential {
     display: contents;
 }
@@ -639,6 +638,55 @@ td.weights-table {
     font-size: 0.81rem;
     font-family: var(--main-font);
     color: #F9CF17;
+}
+
+.delete-popup{
+    border: 2px solid white;
+    border-radius: 10px;
+    position: fixed;
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    height: 250px;
+    width: 350px;
+    transition: opacity ease-in-out 0.5s;
+    opacity: 0;
+    z-index: -1;
+    background-color: #242424;
+}
+.delete-popup .delete-heading{
+    display: flex;
+    place-content: center;
+}
+.delete-popup.show{
+    opacity: 100;
+    z-index:1000;
+}
+
+.delete-message{
+    height: 80%;
+    display: grid;
+    place-content: center;
+    place-items: center;
+    font-size: 0.9rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1.5fr 1fr;
+}
+.delete-message .delete-cancel{
+    color: #df0303;
+    background-color: white;
+    border-radius: 10px;
+    grid-area: 2/1/3/2;
+}
+.delete-message p{
+    grid-area: 1/1/2/3;
+}
+.delete-message .delete-confirm{
+    grid-area: 2/2/3/3;
+
 }
 
 @media (max-width: 900px) {
