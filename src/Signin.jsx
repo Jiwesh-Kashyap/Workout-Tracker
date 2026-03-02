@@ -20,6 +20,8 @@ export default function Signin() {
             });
 
             if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("userName", data.user.name);
                 navigate("/");
             } else {
                 const data = await response.json()
