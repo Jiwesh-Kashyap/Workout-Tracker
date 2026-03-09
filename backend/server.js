@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');   //frontend talks to backend
 const workoutRouter = require('./routes/workoutRoutes');
 const userRouter = require('./routes/user');
+const scheduleRouter = require('./routes/schedule');
 
 const cookieParser = require('cookie-parser');
 const { checkForAuthenticationCookie } = require('./middleware/authn');
@@ -27,6 +28,7 @@ app.use(checkForAuthenticationCookie("token"));
 
 app.use('/api/workouts', workoutRouter);
 app.use('/api/user', userRouter);
+app.use('/', scheduleRouter);
 
 app.get('/', () => {
     res.json({ message: 'Welcome to workout tracker app.' });

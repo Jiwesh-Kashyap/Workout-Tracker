@@ -3,6 +3,7 @@ import Tracker from "./Tracker";
 import Signin from "./Signin";
 import Signup from "./Signup";
 import { useEffect, useState } from "react";
+import Schedule from "./Schedule";
 
 function App() {
   const [name, setName] = useState("User");
@@ -77,7 +78,8 @@ function App() {
           </div>
         </nav>
         <Routes>
-          <Route path="/" element={<Tracker />} />
+          <Route path="/" element={<Schedule />} />
+          <Route path="/tracker" element={<Tracker/>}/>
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

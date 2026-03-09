@@ -4,7 +4,7 @@
 }
 
 .top {
-    background-color: rgba(36, 9, 62, 0.474);
+    background-color: rgba(36, 9, 62, 0.475);
     align-items: center;
 }
 
@@ -687,6 +687,45 @@ td.weights-table {
 .delete-message .delete-confirm{
     grid-area: 2/2/3/3;
 
+}
+
+.schedule{
+    display: flex;
+    justify-content: center;
+}
+.day-plan{
+    border: 3px solid white;
+    border-radius: 5px;
+    width: 70vw;
+    height: 150px;
+    display: grid;
+    grid-template-columns: 50px auto;
+    grid-template-rows: 90px 40px;
+    place-items: center;
+    background-color: #24093e79;
+    backdrop-filter: blur(10px);
+}
+.day-plan-h2{
+    grid-area: 1/2/2/3;
+}
+.day-plan-h4{
+    grid-area: 2/2/3/3;
+}
+.day-list{
+
+    list-style: none;
+    display: flex;
+}
+.day-list li{
+   
+    
+}
+.schedule-form{
+    display: flex;
+    column-gap: 10px;
+    position: fixed;
+    bottom: 10px;
+    align-self: center;
 }
 
 @media (max-width: 900px) {
