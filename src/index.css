@@ -691,40 +691,61 @@ td.weights-table {
 
 .schedule{
     display: flex;
+    min-height: 100vh;
     justify-content: center;
+    flex-direction: column;
+    margin: 0;
 }
 .day-plan{
     border: 3px solid white;
     border-radius: 5px;
     width: 70vw;
     height: 150px;
+    row-gap: 20px;
     display: grid;
     grid-template-columns: 50px auto;
-    grid-template-rows: 90px 40px;
+    grid-template-rows: 80px 50px;
     place-items: center;
     background-color: #24093e79;
     backdrop-filter: blur(10px);
+    transition: box-shadow 0.3s ease;
+}
+.day-plan:hover{
+    box-shadow: 2px 2px 5px 5px rgba(36, 9, 62, 0.399)
+} 
+.day-plan:hover .day-plan-h2{
+    font-size: 2rem;
 }
 .day-plan-h2{
+    transition: font-size 0.24s ease-out;
     grid-area: 1/2/2/3;
 }
 .day-plan-h4{
     grid-area: 2/2/3/3;
 }
+.day-plan input{
+    height: 15px;
+    width: 15px;
+    grid-area: 1/1/3/2;
+}
 .day-list{
-
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
     list-style: none;
     display: flex;
+    padding-left: 0px;
+    padding-bottom: 40px;
+    flex-grow: 1;
+    align-items: center;
+    /* width: max-content; */
 }
-.day-list li{
-   
-    
-}
+
 .schedule-form{
     display: flex;
     column-gap: 10px;
-    position: fixed;
     bottom: 10px;
+    padding-bottom: 10px;
     align-self: center;
 }
 

@@ -15,7 +15,7 @@ function DeletePopUp({ varClass, onDelFunc, onCancel }) {
             <p>WARNING!</p>
         </div>
         <div className="delete-message">
-            <p>This will delete this exercise permanently!</p>
+            <p>This willx delete this exercise permanently!</p>
             <button className="delete-confirm" onClick={handleConfirm}>CONFIRM</button>
             <button className="delete-cancel" onClick={handleCancel}>CANCEL</button>
         </div>

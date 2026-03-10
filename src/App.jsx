@@ -40,7 +40,7 @@ function App() {
         <h2 id="welcome">Welcome {name},</h2>
         <div className="links">
           <Link
-            to="/"
+            to="/tracker"
             style={{
               color: "white",
               textDecoration: "none",
