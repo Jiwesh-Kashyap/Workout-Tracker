@@ -79,7 +79,7 @@ function App() {
         </nav>
         <Routes>
           <Route path="/" element={<Schedule />} />
-          <Route path="/tracker" element={<Tracker/>}/>
+          <Route path="/tracker/:dayName" element={<Tracker/>}/>
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

@@ -20,7 +20,15 @@ const workoutSchema = mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
-    }
+    },
+    completed: {
+        type: Boolean,
+        default: false,
+    },
+    scheduleID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "schedule",
+    },
 }, {timestamps: true});
 
 const workoutModel = mongoose.model('workout', workoutSchema);

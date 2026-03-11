@@ -1,15 +1,9 @@
 import React from 'react';
 import Row from './Row';
 
-function Output({list, onDelete}){
-    // const [isFocused, setIsFocused] = useState(0);
-    // const [isComplete, setIsComplete] = useState(false);
-    // const handleComplete = (isComplete) => {
-
-    // }
-    // const [ind, setInd] = useState(0);
+function Output({list, onDelete, dayName}){
     const handleDelete = async (workoutName) => {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/workouts`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
             method: "DELETE",
             credentials: 'include',
             headers: {
@@ -43,7 +37,7 @@ function Output({list, onDelete}){
 
                 <tbody>
                     {list.map((item,i)=> (
-                        <Row key = {item._id} item={item} index = {i} handleDelete={handleDelete}/>
+                        <Row key = {item._id} item={item} index = {i} handleDelete={handleDelete} dayName = {dayName}/>
                     ))}
                 </tbody>
 

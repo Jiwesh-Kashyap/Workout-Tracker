@@ -7,11 +7,16 @@ router.get("/", async (req, res) => {
     return res.status(400).json({ message: "Invalid user!" });
   }
   const plans = await Schedule.find({ createdBy: req.user._id }).sort({
-    updatedAt,
+    createdAt: -1,
   });
-  return res.status(200).json({ plans });
+  res.status(200).json(plans);
 });
 router.post("/", async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(401)
+      .json({ message: "You must be logged in to add a plan" });
+  }
   const { dayName, message, checker } = req.body;
   try {
     const plan = await Schedule.create({
@@ -26,8 +31,31 @@ router.post("/", async (req, res) => {
     res.status(400);
   }
 });
+router.put("/", async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Invalid user!" });
+  }
+  const { dayName } = req.body;
+  try {
+    const plan = await Schedule.findOne({
+      dayName,
+      createdBy: req.user._id,
+    });
+
+    plan.checker = !plan.checker;
+
+    await plan.save();
+
+    res.status(200).json({ checker: plan.checker });
+  } catch (err) {
+    console.log("routes/schedule.js-> Error while updating checker", err);
+  }
+});
 router.delete("/", async (req, res) => {
-  const { dayName, createdBy } = req.body;
+  if (!req.user) {
+    return res.status(401).json({ message: "Invalid user!" });
+  }
+  const { dayName } = req.body;
   try {
     const plan = await Schedule.findOne({
       dayName: dayName,

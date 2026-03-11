@@ -1,8 +1,9 @@
 import React from "react";
 
-function Header(){
+function Header({dayName}){
+    const name = dayName.toUpperCase();
     return(<div id="heading">
-        <h1 className="racing-sans-one-regular">WORKOUT TRACKER</h1>
+        <h2>{name} PLAN</h2>
     </div>);
 }
 

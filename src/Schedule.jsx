@@ -32,12 +32,12 @@ function Schedule() {
     useEffect(() => {
         const fetchSchedule = async () => {
             try{
-                const request = await fetch('http://localhost:4000', {
-                method: 'POST',
-                credentials: 'include',
+                const response = await fetch('http://localhost:4000', {
+                    credentials: 'include',
                 })
-                if(!request.ok){
-                    console.log('schedule.jsx=> Error in posting schedule!');
+                if(response.ok){
+                    const json = await response.json();
+                    setPlans(json);
                 }
             }
             catch(error){
@@ -47,13 +47,34 @@ function Schedule() {
         fetchSchedule();
     }, []);
 
-    const handleCheck = () => {
+    // const handleCheck = () => {
 
-    }
-    const addPlan = (e) => {
+    // }
+    const addPlan = async (e) => {
         e.preventDefault();
-        if(!validateInput()) return;
-        setPlans(c => [...c, <DayPlan key={c.length} name={dayName} content={message} handleCheck={handleCheck}></DayPlan>]);
+        if (!validateInput()) return;
+
+        const newPlan = { dayName, message };
+
+        try {
+            const response = await fetch('http://localhost:4000', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newPlan),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                // If backend added it successfully, fetch the updated list 
+                // Alternatively, just append it locally:
+                setPlans(prev => [newPlan, ...prev]);
+            } else {
+                console.log("Failed to add plan to backend");
+            }
+        } catch (err) {
+            console.log("Error posting plan:", err);
+        }
+
         setDayName('');
         setMessage('');
     };
@@ -65,11 +86,16 @@ function Schedule() {
         else return true;
     }
 
-  const planList = plans.map((item,ind) => (
-        <li key={ind}>
-            {item}
-        </li>
-    )); //keep an id here
+    const planList = plans.map((item, ind) => {
+        if (React.isValidElement(item)) {
+            return <li key={ind}>{item}</li>;
+        }
+        return (
+            <li key={item._id || ind}>
+                <DayPlan name={item.dayName} content={item.message} checker={item.checker} />
+            </li>
+        );
+    });
 
 
     return (

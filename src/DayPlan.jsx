@@ -1,15 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function DayPlan({ name, content, handleCheck }) {
-  const [check, setCheck] = useState(false);
+function DayPlan({ name, content, checker }) {
+  const [check, setCheck] = useState(checker || false);
 
-  const checkFn = (check) => {
-    setCheck((c) => !c);
-    handleCheck(check);
+  useEffect(() => {
+    setCheck(checker || false);
+  }, [checker]);
+
+  const navigate = useNavigate();
+  const handleClick = async () => {
+    navigate(`/tracker/${name}`);
+  };
+  const checkFn = async () => {
+    try {
+      const response = await fetch("http://localhost:4000", {
+        method: "PUT",
+        body: JSON.stringify({ dayName: name }),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const fetchedCheck = await response.json();
+        setCheck(fetchedCheck.checker);
+      }
+    } catch (err) {
+      console.log("Error while updating checker: ", err);
+    }
   };
 
   return (
-    <div className="day-plan">
+    <div className="day-plan" onClick={handleClick}>
       <input type="checkbox" checked={check} onChange={checkFn} />
       <h2 className="day-plan-h2">{name}</h2>
       <h4 className="day-plan-h4">{content}</h4>

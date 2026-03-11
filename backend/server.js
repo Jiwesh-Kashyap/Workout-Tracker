@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
 
-app.use('/api/workouts', workoutRouter);
+app.use('/tracker', workoutRouter);
 app.use('/api/user', userRouter);
 app.use('/', scheduleRouter);
 

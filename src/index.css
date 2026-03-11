@@ -711,7 +711,8 @@ td.weights-table {
     transition: box-shadow 0.3s ease;
 }
 .day-plan:hover{
-    box-shadow: 2px 2px 5px 5px rgba(36, 9, 62, 0.399)
+    box-shadow: 2px 2px 5px 5px rgba(36, 9, 62, 0.399);
+    cursor: pointer;
 } 
 .day-plan:hover .day-plan-h2{
     font-size: 2rem;

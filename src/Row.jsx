@@ -3,7 +3,7 @@ import DoneImage from "./DoneImage";
 import DeleteImage from "./DeleteImage";
 import Checker from "./Checker";
 
-function Row({ item, index, handleDelete }) {
+function Row({ item, index, handleDelete, dayName }) {
     const [isCompleted, setIsCompleted] = useState(false);
     const [isDeleted, setIsDeleted] = useState(false);
 
@@ -11,8 +11,23 @@ function Row({ item, index, handleDelete }) {
     const doneClass = (isCompleted ? 'done hide' : 'done');
     const checkerClass = (isCompleted ? 'checker-list hide' : 'checker-list');
 
-    function handleComplete() {
-        setIsCompleted(true);
+    const  handleComplete = async () => {
+        try{
+            const response = await fetch(`http://localhost:4000/tracker/${dayName}`, {
+                method: 'PUT',
+                body: JSON.stringify({name: item.exerciseName}),
+                headers: {"Content-Type": "application/json"},
+                credentials: 'include',
+            })
+            if(response.ok){
+                console.log('Row updated successfully!');
+            }
+            const { workout } = await response.json();
+            setIsCompleted(workout.completed);
+        }
+        catch(err){
+            console.log('Error while updating row!', err);
+        }
     }
     function onDelete(workoutName) {
         handleDelete(workoutName);

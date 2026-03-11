@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from './Header';
 import Lenis from 'lenis';
 import Input from './Input';
@@ -7,11 +8,12 @@ import Footer from './Footer';
 
 function Tracker() {
     const [plan, setPlan] = useState([]);
+    const { dayName } = useParams();
 
     useEffect(() => {
         const fetchWorkouts = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/workouts`, {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                     credentials: 'include'
                 });
                 if (response.ok) {
@@ -55,7 +57,7 @@ function Tracker() {
 
         try {
             console.log("Sending POST to backend:", workoutData);
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/workouts`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'POST',
                 credentials: 'include',
                 body: JSON.stringify(workoutData), 
@@ -81,7 +83,7 @@ function Tracker() {
     }
     return (
         <>
-            <Header />
+            <Header dayName={dayName}/>
             <svg
                 width="100%"
                 height="20"
@@ -99,7 +101,7 @@ function Tracker() {
             <div id="layout">
                 <Input onAddExercise={addExercise} />
                 <hr id="divider" />
-                <Output list={plan} onDelete={(workoutName) => deleteExercise(workoutName)}/>
+                <Output list={plan} dayName={dayName} onDelete={(workoutName) => deleteExercise(workoutName)}/>
             </div>
             <Footer />
         </>
