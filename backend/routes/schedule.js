@@ -17,12 +17,11 @@ router.post("/", async (req, res) => {
       .status(401)
       .json({ message: "You must be logged in to add a plan" });
   }
-  const { dayName, message, checker } = req.body;
+  const { dayName, message } = req.body;
   try {
     const plan = await Schedule.create({
       dayName,
       message,
-      checker,
       createdBy: req.user._id,
     });
     res.status(200).json({ message: "Plan added to schedule successfully!" });
