@@ -1,11 +1,19 @@
-import React, {useRef, useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import CustomCheckBox from './CustomCheckBox';
-// import motion from 'motion/react';
+import { ResetContext } from './ResetContext';
 
-function Checker({sets,className, onComplete}){
+function Checker({sets, className, onComplete}){
     
     const [cnt, setCnt] = useState(0);
+    const { globalReset, setGlobalReset } = useContext(ResetContext);
 
+    useEffect(() => {
+        if(globalReset) {
+            setCnt(0);
+            setGlobalReset(false);
+        }
+    }, [globalReset, setGlobalReset])
+     
     const list = [];
     for(let i=0; i<sets; i++){
         list.push(i);
@@ -27,7 +35,7 @@ function Checker({sets,className, onComplete}){
     }
 
     const listMap = list.map((i) => 
-        <li key={i}><CustomCheckBox ind = {i} func = {isValidCheck}/></li>
+        <li key={i}><CustomCheckBox ind={i} func={isValidCheck} checked={cnt > i} /></li>
     );
     return(
         <ul className={className}>{listMap}</ul>

@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Row from './Row';
+import ResetPopUp from './ResetPopUp';
+import Button from './Button';
 
-function Output({list, onDelete, dayName}){
+function Output({list, onDelete, dayName, handleReset}) {
+    const [showReset, setShowReset] = useState(false);
+
     const handleDelete = async (workoutName) => {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
             method: "DELETE",
@@ -20,7 +24,17 @@ function Output({list, onDelete, dayName}){
         }
     }
     return(<>
+        {showReset && (
+            <ResetPopUp 
+                varClass="show" 
+                onConfirm={ () => handleReset() }
+                onCancel={() => setShowReset(false)} 
+            />
+        )}
         <div id = "output">
+            <button className='output-reset' onClick={() => setShowReset(true)}>
+                Reset Progress
+            </button>
             <h1>THE PLAN</h1>
             <br />
             <table>

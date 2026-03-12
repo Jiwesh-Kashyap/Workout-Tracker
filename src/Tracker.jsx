@@ -5,9 +5,11 @@ import Lenis from 'lenis';
 import Input from './Input';
 import Output from './Output';
 import Footer from './Footer';
+import { ResetContext } from './ResetContext';
 
 function Tracker() {
     const [plan, setPlan] = useState([]);
+    const [globalReset, setGlobalReset] = useState(false);
     const { dayName } = useParams();
 
     useEffect(() => {
@@ -81,8 +83,29 @@ function Tracker() {
     function deleteExercise(workoutName){
         setPlan(c => c.filter((row) => row.exerciseName!==workoutName));
     }
+    
+    const handleReset = async () => {
+        try{
+            const response = await fetch(`http://localhost:4000/tracker/${dayName}`, {
+                method: 'PATCH',
+                body: JSON.stringify({dayName}),
+                credentials: 'include',
+                headers: {'Content-Type':'application/json'},
+            });
+            if(response.ok){
+                console.log('Successfully resetted the progress!');
+            }
+            const workouts = await response.json();
+            setPlan(workouts);
+            setGlobalReset(true);
+        }
+        catch(err){
+            console.log('Error in resetting progress! ', err);
+        }
+    }
+
     return (
-        <>
+        <ResetContext.Provider value = {{globalReset, setGlobalReset}}>
             <Header dayName={dayName}/>
             <svg
                 width="100%"
@@ -101,10 +124,10 @@ function Tracker() {
             <div id="layout">
                 <Input onAddExercise={addExercise} />
                 <hr id="divider" />
-                <Output list={plan} dayName={dayName} onDelete={(workoutName) => deleteExercise(workoutName)}/>
+                <Output list={plan} dayName={dayName} handleReset={handleReset} onDelete={(workoutName) => deleteExercise(workoutName)}/>
             </div>
             <Footer />
-        </>
+        </ResetContext.Provider>
     )
 }
 
