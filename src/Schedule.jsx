@@ -32,7 +32,7 @@ function Schedule() {
     useEffect(() => {
         const fetchSchedule = async () => {
             try{
-                const response = await fetch('http://localhost:4000', {
+                const response = await fetch('https://workout-tracker-y064.onrender.com', {
                     credentials: 'include',
                 })
                 if(response.ok){
@@ -57,7 +57,7 @@ function Schedule() {
         const newPlan = { dayName, message };
 
         try {
-            const response = await fetch('http://localhost:4000', {
+            const response = await fetch('https://workout-tracker-y064.onrender.com', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newPlan),

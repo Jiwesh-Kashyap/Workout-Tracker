@@ -13,8 +13,8 @@ router.post("/signin", async (req, res) => {
         const token = await USER.matchPasswordAndGenerateToken(email, password);
         return res.cookie("token", token, {
             httpOnly: true,
-            sameSite: 'lax',
-            secure: false, // Set to true if using HTTPS
+            sameSite: 'none',
+            secure: true, // Required for cross-site cookies on HTTPS
             path: "/"
         }).status(200).json({ message: "Login Successful", user: { name: findUser.name, email: findUser.email } });
     } catch (error) {
@@ -45,8 +45,8 @@ router.post("/signup", async (req, res, next) => {
 
         return res.status(201).cookie("token", token, {
             httpOnly: true,
-            sameSite: 'lax',
-            secure: false, // Set to true if using HTTPS
+            sameSite: 'none',
+            secure: true, // Required for cross-site cookies on HTTPS
             path: "/"
         }).json({ message: "User created successfully" });
     } catch (error) {

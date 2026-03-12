@@ -25,7 +25,7 @@ function Row({ item, index, handleDelete, dayName }) {
 
     const  handleComplete = async () => {
         try{
-            const response = await fetch(`http://localhost:4000/tracker/${dayName}`, {
+            const response = await fetch(`https://workout-tracker-y064.onrender.com/tracker/${dayName}`, {
                 method: 'PUT',
                 body: JSON.stringify({name: item.exerciseName, intent: "COMPLETE_WORKOUT"}),
                 headers: {"Content-Type": "application/json"},
@@ -52,7 +52,7 @@ function Row({ item, index, handleDelete, dayName }) {
     const handleEdit = async () => {
 
         try{
-            const response = await fetch(`http://localhost:4000/tracker/${dayName}`, {
+            const response = await fetch(`https://workout-tracker-y064.onrender.com/tracker/${dayName}`, {
                 method: 'PUT',
                 credentials: 'include',
                 body: JSON.stringify({ 
