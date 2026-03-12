@@ -13,7 +13,7 @@ const { checkForAuthenticationCookie } = require('./middleware/authn');
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:5173", "https://workout-tracker-jiwesh.vercel.app"],
+    origin: ["http://localhost:5173", "https://workout-tracker-5ym.pages.dev"],
     credentials: true,
 })); //fixes the CORS error
 
