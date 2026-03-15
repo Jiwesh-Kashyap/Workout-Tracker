@@ -30,12 +30,23 @@ body {
 
     /* Background Styles */
     background-color: #242424;
-    /* Fallback */
+}
+
+/* Fallback: Moved the background to a pseudo-element for vastly better painting performance in Chromium */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background-image: url("./set-tracker.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-attachment: fixed;
+    z-index: -1;
+    will-change: transform;
+    pointer-events: none;
 }
 
 html.lenis,

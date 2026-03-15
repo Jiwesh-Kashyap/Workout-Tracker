@@ -86,7 +86,7 @@ function Tracker() {
     
     const handleReset = async () => {
         try{
-            const response = await fetch(`http://localhost:4000/tracker/${dayName}`, {
+            const response = await fetch(`https://workout-tracker-y064.onrender.com/tracker/${dayName}`, {
                 method: 'PATCH',
                 body: JSON.stringify({dayName}),
                 credentials: 'include',
