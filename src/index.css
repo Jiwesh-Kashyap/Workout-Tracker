@@ -179,12 +179,13 @@ html.lenis body {
     display: inline-block;
     width: fit-content;
     font-size: 1.2rem;
-    border: 2px solid rgba(36, 9, 62, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    padding: 5px;
-    background-color: rgba(36, 9, 62, 0.5);
-    /* backdrop-filter: blur(3px) brightness(80%); */
-    /* -webkit-backdrop-filter: blur(3px); */
+    padding: 8px 15px;
+    background-color: rgba(36, 9, 62, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 #input input[type="text"],
@@ -192,11 +193,14 @@ html.lenis body {
     height: 70%;
     font-size: 1.2rem;
     border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 0 10px;
     position: relative;
     top: 10%;
     grid-column: 2;
-    /* min-width: 200px; */
-    /* width:min-content; */
+    transition: all 0.3s ease;
 }
 
 #input h3 {
@@ -234,17 +238,28 @@ textarea:focus {
 
 .input-button,
 .enter-button {
-    background-color: rgba(36, 9, 62, 0.474);
-    height: 40px;
+    background: linear-gradient(135deg, rgba(145, 28, 255, 0.6) 0%, rgba(36, 9, 62, 0.8) 100%);
+    height: 45px;
     color: white;
-    border: 1px solid rgba(36, 9, 62, 0.474);
-    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
     position: relative;
     top: 30%;
     cursor: pointer;
     font-size: 1.1rem;
     margin-bottom: 20px;
-    font-family: "Poppins";
+    font-family: inherit;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.input-button:hover,
+.enter-button:hover {
+    background: linear-gradient(135deg, rgba(145, 28, 255, 0.8) 0%, rgba(36, 9, 62, 1) 100%);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(145, 28, 255, 0.4);
 }
 
 #label-of-weight {
@@ -424,8 +439,12 @@ textarea:focus {
 #output table {
     display: flex;
     flex-direction: column;
-    border: 1px solid white;
-    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    background-color: rgba(36, 9, 62, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 td.serial,
@@ -466,15 +485,15 @@ td.weights-table {
 }
 
 #output table:not(:first-child, :last-child) {
-    border: 1px solid white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #output table:first-of-type {
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #output table tr:last-of-type {
-    border-top: 1px solid white;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #output tbody tr:nth-of-type(odd) {
@@ -817,8 +836,8 @@ td.weights-table {
     margin: 0;
 }
 .day-plan{
-    border: 3px solid white;
-    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
     width: 70vw;
     height: 150px;
     row-gap: 20px;
@@ -826,12 +845,16 @@ td.weights-table {
     grid-template-columns: 50px auto;
     grid-template-rows: 80px 50px;
     place-items: center;
-    background-color: #24093e79;
-    backdrop-filter: blur(10px);
-    transition: box-shadow 0.3s ease;
+    background-color: rgba(36, 9, 62, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 .day-plan:hover{
-    box-shadow: 2px 2px 5px 5px rgba(36, 9, 62, 0.399);
+    box-shadow: 0 12px 40px rgba(145, 28, 255, 0.4);
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.4);
     cursor: pointer;
 } 
 .day-plan:hover .day-plan-h2{
@@ -868,6 +891,43 @@ td.weights-table {
     bottom: 10px;
     padding-bottom: 10px;
     align-self: center;
+}
+
+#day-name, #day-plan-message {
+    height: 45px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 0 10px;
+    transition: all 0.3s ease;
+}
+#day-name:focus, #day-plan-message:focus {
+    outline: none;
+    border: 1px solid #751ee5;
+    box-shadow: 0 0 8px rgba(117, 30, 229, 0.5);
+}
+
+.add-day-plan-button {
+    background: linear-gradient(135deg, rgba(145, 28, 255, 0.6) 0%, rgba(36, 9, 62, 0.8) 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-family: inherit;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.add-day-plan-button:hover {
+    background: linear-gradient(135deg, rgba(145, 28, 255, 0.8) 0%, rgba(36, 9, 62, 1) 100%);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(145, 28, 255, 0.4);
 }
 
 @media (max-width: 900px) {
