@@ -84,23 +84,41 @@ function Tracker() {
         setPlan(c => c.filter((row) => row.exerciseName!==workoutName));
     }
     
-    const handleReset = async () => {
-        try{
-            const response = await fetch(`https://workout-tracker-y064.onrender.com/tracker/${dayName}`, {
+    const handleReset = async () => {   //optimistic UI
+        const prevPlan = [...plan];
+        
+        const optimisticallyResetPlan = plan.map(workout => ({
+            ...workout,
+            status: "pending", // Or whatever your property name for completed state is
+            isCompleted: false
+        }));
+        
+        setPlan(optimisticallyResetPlan);
+        setGlobalReset(true);
+
+        // 3. Send API Request
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PATCH',
                 body: JSON.stringify({dayName}),
                 credentials: 'include',
                 headers: {'Content-Type':'application/json'},
             });
-            if(response.ok){
-                console.log('Successfully resetted the progress!');
+            
+            if (!response.ok) {
+                throw new Error('Failed to reset on backend');
             }
+            
+            // Optional: Re-sync with backend data just to be safe
             const workouts = await response.json();
             setPlan(workouts);
-            setGlobalReset(true);
-        }
-        catch(err){
-            console.log('Error in resetting progress! ', err);
+            
+        } catch(err) {
+            // 4. Rollback if error
+            console.log('Error in resetting progress!', err);
+            setPlan(prevPlan); // Revert to backup
+            // Optionally, we might need to toggle globalReset back to false depending on how other components use it
+            setGlobalReset(false); 
         }
     }
 
