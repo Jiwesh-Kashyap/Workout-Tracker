@@ -109,15 +109,14 @@ function Tracker() {
                 throw new Error('Failed to reset on backend');
             }
             
-            // Optional: Re-sync with backend data just to be safe
+            //Re-sync with backend data just to be safe
             const workouts = await response.json();
             setPlan(workouts);
             
         } catch(err) {
-            // 4. Rollback if error
+            //Rollback if error
             console.log('Error in resetting progress!', err);
-            setPlan(prevPlan); // Revert to backup
-            // Optionally, we might need to toggle globalReset back to false depending on how other components use it
+            setPlan(prevPlan);
             setGlobalReset(false); 
         }
     }

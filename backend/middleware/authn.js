@@ -16,6 +16,12 @@ function checkForAuthenticationCookie(cookieName) {
             console.log("[AUTH DEBUG] Token validated for user:", userPayload.email);
         } catch (error) {
             console.error("[AUTH DEBUG] Token validation failed:", error.message);
+            res.clearCookie(cookieName, {   //to delete the invalid token
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                path: '/'
+            });
         }
 
         return next();

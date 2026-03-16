@@ -1,9 +1,8 @@
 import React, { useState, useEffect} from "react";
 import DoneImage from "./DoneImage";
 import DeleteImage from "./DeleteImage";
+import EditImage from "./EditImage";
 import Checker from "./Checker";
-import editImage from './assets/editImage.png';
-import { ResetContext } from "./ResetContext";
 
 function Row({ item, index, handleDelete, dayName }) {
     const [isCompleted, setIsCompleted] = useState(item.completed || false);
@@ -25,7 +24,7 @@ function Row({ item, index, handleDelete, dayName }) {
 
     const  handleComplete = async () => {
         try{
-            const response = await fetch(`https://workout-tracker-y064.onrender.com/tracker/${dayName}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
                 body: JSON.stringify({name: item.exerciseName, intent: "COMPLETE_WORKOUT"}),
                 headers: {"Content-Type": "application/json"},
@@ -52,7 +51,7 @@ function Row({ item, index, handleDelete, dayName }) {
     const handleEdit = async () => {
 
         try{
-            const response = await fetch(`https://workout-tracker-y064.onrender.com/tracker/${dayName}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
                 credentials: 'include',
                 body: JSON.stringify({ 
@@ -93,7 +92,7 @@ function Row({ item, index, handleDelete, dayName }) {
             <td className='action-cell'>
                 <DoneImage className={doneClass} onCheckFunc={handleComplete} />
                 <DeleteImage className={deleteClass} onDelFunc={()=>onDelete(item.exerciseName)}/>
-                <img className="edit-row" src={editImage} onClick={() => setEdit(true)} style={{cursor: "pointer"}}></img>
+                <EditImage className="edit-row" onClickFunc={() => setEdit(true)} />
                 <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete}/>
 
                 <div className={editFormClass}>

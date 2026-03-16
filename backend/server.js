@@ -1,4 +1,5 @@
-require('dotenv').config({ path: './.env' });   //acquiring env variables
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+require('dotenv').config({ path: `./${envFile}` });   //acquiring env variables
 
 const express = require('express');
 const mongoose = require('mongoose');

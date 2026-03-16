@@ -14,7 +14,7 @@ function DayPlan({ name, content, checker }) {
   };
   const checkFn = async () => {
     try {
-      const response = await fetch("http://localhost:4000", {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
         method: "PUT",
         body: JSON.stringify({ dayName: name }),
         headers: { "Content-Type": "application/json" },

@@ -1,4 +1,3 @@
-const { verify } = require("crypto");
 const JWT = require("jsonwebtoken");
 const secret = "!creativeBot86kim";
 

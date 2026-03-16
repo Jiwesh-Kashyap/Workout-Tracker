@@ -32,7 +32,7 @@ function Schedule() {
     useEffect(() => {
         const fetchSchedule = async () => {
             try{
-                const response = await fetch('https://workout-tracker-y064.onrender.com', {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
                     credentials: 'include',
                 })
                 if(response.ok){
@@ -57,7 +57,7 @@ function Schedule() {
         const newPlan = { dayName, message };
 
         try {
-            const response = await fetch('https://workout-tracker-y064.onrender.com', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newPlan),

@@ -22,7 +22,15 @@ router.post("/signin", async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 });
-
+router.post("/logout", async (req, res) => {
+    return res.cookie("token", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite:'none',
+        expires: new Date(0),
+        path: "/",
+    });
+})
 router.post("/signup", async (req, res, next) => {
     const { name, email, password } = req.body;
 

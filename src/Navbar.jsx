@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import "./Navbar.css"; // We'll create a dedicated CSS or put it in index.css
+import { Navigate } from "react-router-dom";
+import "./Navbar.css";
 
 function Navbar({ name }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +41,34 @@ function Navbar({ name }) {
         <Link to="/signup" className="nav-link" onClick={closeMenu}>
           Sign Up
         </Link>
+        {name !== "User" && (
+            <button className="nav-link logout-btn" onClick={async () => {
+              // TODO: Implement your frontend logout logic here
+              // Example:
+            try{
+              const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user/logout`, {
+                method: "POST",
+                credentials: "include",
+              });
+              if(response.ok){
+                localStorage.removeItem("userName");
+                console.log("Successfully Logged Out!");
+                Navigate('/');
+                closeMenu();
+                window.location.href = '/signin';
+              }
+              else{
+                console.log("Error while logging out");
+              }
+            }
+            catch(err){
+                console.log('Error while logging out', err);
+            }
+              closeMenu();
+            }}>
+              Log Out
+            </button>
+        )}
       </div>
     </nav>
   );

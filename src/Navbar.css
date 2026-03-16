@@ -45,6 +45,18 @@
   box-shadow: 0 4px 10px rgba(145, 28, 255, 0.2);
 }
 
+.logout-btn {
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 50, 50, 0.2); /* Red tint for logout */
+  border-color: rgba(255, 50, 50, 0.5);
+  box-shadow: 0 4px 10px rgba(255, 50, 50, 0.2);
+}
+
 /* Make Schedule button more prominent */
 .schedule-btn {
   background-color: rgba(145, 28, 255, 0.6);
