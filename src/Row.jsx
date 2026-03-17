@@ -1,39 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import DoneImage from "./DoneImage";
 import DeleteImage from "./DeleteImage";
+import EditImage from "./EditImage";
 import Checker from "./Checker";
 
 function Row({ item, index, handleDelete, dayName }) {
-    const [isCompleted, setIsCompleted] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(item.completed || false);
     const [isDeleted, setIsDeleted] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [numOfSets, setNumOfSets] = useState(item.numOfSets);
+    const [numOfReps, setNumOfReps] = useState(item.numOfReps);
+    const [weight, setWeight] = useState(item.weight);
+
+    useEffect(() => {
+        setIsCompleted(item.completed || false);
+    }, [item]);
+
+
 
     const deleteClass = (isDeleted ? 'delete hide' : 'delete');
     const doneClass = (isCompleted ? 'done hide' : 'done');
     const checkerClass = (isCompleted ? 'checker-list hide' : 'checker-list');
 
     const  handleComplete = async () => {
+        //Optimistic AI
+        const previousState = isCompleted;
+        setIsCompleted(!isCompleted);
+        
         try{
-            const response = await fetch(`http://localhost:4000/tracker/${dayName}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
-                body: JSON.stringify({name: item.exerciseName}),
+                body: JSON.stringify({name: item.exerciseName, intent: "COMPLETE_WORKOUT"}),
                 headers: {"Content-Type": "application/json"},
                 credentials: 'include',
+                intent: "COMPLETE_WORKOUT"
             })
             if(response.ok){
                 console.log('Row updated successfully!');
+            } else {
+                 throw new Error("Backend response not ok");
             }
+            
             const { workout } = await response.json();
             setIsCompleted(workout.completed);
         }
         catch(err){
             console.log('Error while updating row!', err);
+            setIsCompleted(previousState);
         }
     }
     function onDelete(workoutName) {
         handleDelete(workoutName);
         setIsDeleted(true);
     }
-    const finalClassName = `rows ${isCompleted ? 'completed' : ''} ${isDeleted? 'deleted': ''}`;
+
+    const editFormClass = `delete-popup edit-form ${edit ? 'show': ''}`;
+
+    const handleEdit = async () => {
+
+        try{
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: JSON.stringify({ 
+                    dayName, 
+                    intent: "EDIT_WORKOUT",
+                    name: item.exerciseName,
+                    numOfReps: numOfReps,
+                    numOfSets: numOfSets,
+                    weight: weight,
+                }),
+                headers: {"Content-Type": "application/json"},
+            })
+            if(response.ok){
+                console.log("Workout updated successfully!");
+                const data = await response.json();
+                item.numOfReps = data.numOfReps;
+                item.numOfSets = data.numOfSets;
+                item.weight = data.weight;
+                setEdit(false);
+            }
+        }
+        catch(err){
+            console.log("Error while updating workout!", err);
+        }
+    }
+ 
+    const finalClassName = `rows ${isCompleted ? 'row-completed' : ''} ${isDeleted? 'deleted': ''}`;
 
     return (
         <tr className={finalClassName}>
@@ -47,7 +100,25 @@ function Row({ item, index, handleDelete, dayName }) {
             <td className='action-cell'>
                 <DoneImage className={doneClass} onCheckFunc={handleComplete} />
                 <DeleteImage className={deleteClass} onDelFunc={()=>onDelete(item.exerciseName)}/>
-                <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete} />
+                <EditImage className="edit-row" onClickFunc={() => setEdit(true)} />
+                <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete}/>
+
+                <div className={editFormClass}>
+                    <div className="delete-heading edit-heading">
+                        <p>EDIT EXERCISE</p>
+                    </div>
+                    <div className="delete-message">
+                        <div className="edit-inputs">
+                            <label>Sets: <input type="number" value={numOfSets} onChange={(e) => setNumOfSets(e.target.value)} /></label>
+                            <label>Reps: <input type="number" value={numOfReps} onChange={(e) => setNumOfReps(e.target.value)} /></label>
+                            <label>Weight: <input type="number" value={weight} onChange={(e) => setWeight(e.target.value)} /></label>
+                        </div>
+                        <div className="delete-buttons">
+                            <button className="delete-confirm edit-confirm" onClick={handleEdit}>SAVE</button>
+                            <button className="delete-cancel" onClick={() => setEdit(false)}>CANCEL</button>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
     );

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
-function CustomCheckBox({ind,func}){
-    const [check, setCheck] = useState(false);
+function CustomCheckBox({ind, func, checked}){
     const[isShaking, setIsShaking] = useState(false);
     
     function toggleCheck(i){
-        if(func(i)) setCheck(!check);
+        if(func(i)) {
+            // Parent state 'cnt' updates, which will automatically re-render us with checked=true
+        }
         else{
             setIsShaking(true);
 
@@ -17,7 +18,7 @@ function CustomCheckBox({ind,func}){
         }
     }
 
-    const finalClassName = `my-checkbox ${(check)?`checked`:``} ${(isShaking)?`shaking`:``} work-sans-checker`;
+    const finalClassName = `my-checkbox ${(checked)?`checked`:``} ${(isShaking)?`shaking`:``} work-sans-checker`;
 
     return(<>
         <div className={finalClassName}
@@ -28,10 +29,10 @@ function CustomCheckBox({ind,func}){
                 }
             }}
             role='checkbox'
-            aria-checked={check}
+            aria-checked={checked}
             tabIndex="0"
             >
-                {check?"✓" : ind+1}
+                {checked?"✓" : ind+1}
         </div>
     </>);
 }

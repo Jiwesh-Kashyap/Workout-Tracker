@@ -5,9 +5,11 @@ import Lenis from 'lenis';
 import Input from './Input';
 import Output from './Output';
 import Footer from './Footer';
+import { ResetContext } from './ResetContext';
 
 function Tracker() {
     const [plan, setPlan] = useState([]);
+    const [globalReset, setGlobalReset] = useState(false);
     const { dayName } = useParams();
 
     useEffect(() => {
@@ -81,8 +83,46 @@ function Tracker() {
     function deleteExercise(workoutName){
         setPlan(c => c.filter((row) => row.exerciseName!==workoutName));
     }
+    
+    const handleReset = async () => {   //optimistic UI
+        const prevPlan = [...plan];
+        
+        const optimisticallyResetPlan = plan.map(workout => ({
+            ...workout,
+            status: "pending", // Or whatever your property name for completed state is
+            isCompleted: false
+        }));
+        
+        setPlan(optimisticallyResetPlan);
+        setGlobalReset(true);
+
+        // 3. Send API Request
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
+                method: 'PATCH',
+                body: JSON.stringify({dayName}),
+                credentials: 'include',
+                headers: {'Content-Type':'application/json'},
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to reset on backend');
+            }
+            
+            //Re-sync with backend data just to be safe
+            const workouts = await response.json();
+            setPlan(workouts);
+            
+        } catch(err) {
+            //Rollback if error
+            console.log('Error in resetting progress!', err);
+            setPlan(prevPlan);
+            setGlobalReset(false); 
+        }
+    }
+
     return (
-        <>
+        <ResetContext.Provider value = {{globalReset, setGlobalReset}}>
             <Header dayName={dayName}/>
             <svg
                 width="100%"
@@ -101,10 +141,10 @@ function Tracker() {
             <div id="layout">
                 <Input onAddExercise={addExercise} />
                 <hr id="divider" />
-                <Output list={plan} dayName={dayName} onDelete={(workoutName) => deleteExercise(workoutName)}/>
+                <Output list={plan} dayName={dayName} handleReset={handleReset} onDelete={(workoutName) => deleteExercise(workoutName)}/>
             </div>
             <Footer />
-        </>
+        </ResetContext.Provider>
     )
 }
 

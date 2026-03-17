@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const USER = require("../models/user");
 const { createToken } = require("../services/authn");
+const isProduction = process.env.NODE_ENV === 'production';
 
 router.post("/signin", async (req, res) => {
     const { email, password } = req.body;
@@ -13,8 +14,8 @@ router.post("/signin", async (req, res) => {
         const token = await USER.matchPasswordAndGenerateToken(email, password);
         return res.cookie("token", token, {
             httpOnly: true,
-            sameSite: 'lax',
-            secure: false, // Set to true if using HTTPS
+            sameSite: isProduction? 'none':'lax',   //same site 'none' requires secure as true
+            secure: isProduction, // Required for cross-site cookies on HTTPS
             path: "/"
         }).status(200).json({ message: "Login Successful", user: { name: findUser.name, email: findUser.email } });
     } catch (error) {
@@ -22,7 +23,15 @@ router.post("/signin", async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 });
-
+router.post("/logout", async (req, res) => {
+    return res.cookie("token", "", {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction? 'none':'lax',
+        expires: new Date(0),
+        path: "/",
+    }).status(200).json({ message: "Successfully logged out" });
+})
 router.post("/signup", async (req, res, next) => {
     const { name, email, password } = req.body;
 
@@ -45,8 +54,8 @@ router.post("/signup", async (req, res, next) => {
 
         return res.status(201).cookie("token", token, {
             httpOnly: true,
-            sameSite: 'lax',
-            secure: false, // Set to true if using HTTPS
+            secure: isProduction,
+            sameSite: isProduction? 'none':'lax',
             path: "/"
         }).json({ message: "User created successfully" });
     } catch (error) {

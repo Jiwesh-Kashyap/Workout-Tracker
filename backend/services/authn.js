@@ -1,6 +1,5 @@
-const { verify } = require("crypto");
 const JWT = require("jsonwebtoken");
-const secret = "!AnJiAnWeSHa1286";
+const secret = "!creativeBot86kim";
 
 function createToken(user) {
     const payload = {

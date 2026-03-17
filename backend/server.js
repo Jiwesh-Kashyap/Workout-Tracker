@@ -1,4 +1,5 @@
-require('dotenv').config({ path: './.env' });   //acquiring env variables
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+require('dotenv').config({ path: `./${envFile}` });   //acquiring env variables
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -13,7 +14,7 @@ const { checkForAuthenticationCookie } = require('./middleware/authn');
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:5173", "https://workout-tracker-jiwesh.vercel.app"],
+    origin: ["http://localhost:5173", "https://workout-tracker-5ym.pages.dev"],
     credentials: true,
 })); //fixes the CORS error
 
@@ -36,9 +37,10 @@ app.get('/', () => {
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
+        const port = process.env.PORT || 4000;
         // Only start listening once we are connected to the DB
-        app.listen(process.env.PORT, () => {
-            console.log(`Connected to DB & listening on port ${process.env.PORT}`);
+        app.listen(port,"0.0.0.0" ,() => {
+            console.log(`Connected to DB & listening on port ${port}`);
         });
     })
     .catch((error) => {

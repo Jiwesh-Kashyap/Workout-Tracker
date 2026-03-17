@@ -15,21 +15,58 @@ async function getWorkouts(req, res) {
     const workouts = await Workout.find({ scheduleID: schedule._id }).sort({ createdAt: -1 });    //newest first
     res.status(200).json(workouts);
 }
-async function updateWorkout(req, res){
+async function resetWorkouts(req, res){
     if (!req.user) return res.status(401).json({ error: "Unauthorized" });
-    const { dayName } = req.params;
-    const schedule = await Schedule.findOne({ dayName, createdBy: req.user._id });
 
-    if (!schedule) {
-        return res.status(404).json({ error: "Schedule not found!" });
+    const { dayName } = req.params; 
+    const schedule = await Schedule.findOne({ dayName, createdBy: req.user._id });
+    const workouts = await Workout.find({scheduleID: schedule._id}).sort({createdAt: -1});
+
+    for (let index = 0; index < workouts.length; index++) {
+        workouts[index].completed = false;
+        await workouts[index].save();
     }
 
-    const workout = await Workout.findOne({scheduleID: schedule._id, exerciseName: req.body.name});
-    workout.completed = !workout.completed;
+    res.status(200).json(workouts);
+}
+async function updateWorkout(req, res){
+    const { intent } = req.body;
+    if (!req.user) return res.status(401).json({ error: "Unauthorized" });
 
-    await workout.save();
+    if(intent==="EDIT_WORKOUT"){
+        const { dayName } = req.params;
+        const schedule = await Schedule.findOne({ dayName, createdBy: req.user._id });
+        
+        const body = req.body;
 
-    res.status(200).json({workout, message: 'successfully updated workout in db'});
+        if (!schedule) {
+            return res.status(404).json({ error: "Schedule not found!" });
+        }
+    
+        const workout = await Workout.findOne({scheduleID: schedule._id, exerciseName: req.body.name});
+        workout.numOfReps = body.numOfReps;
+        workout.numOfSets = body.numOfSets;
+        workout.weight = body.weight;
+
+        await workout.save(); // Don't forget to save to the database!
+
+        res.status(200).json({ numOfReps: body.numOfReps, numOfSets: body.numOfSets, weight: body.weight });
+    }
+    else if(intent==="COMPLETE_WORKOUT"){
+        const { dayName } = req.params;
+        const schedule = await Schedule.findOne({ dayName, createdBy: req.user._id });
+    
+        if (!schedule) {
+            return res.status(404).json({ error: "Schedule not found!" });
+        }
+    
+        const workout = await Workout.findOne({scheduleID: schedule._id, exerciseName: req.body.name});
+        workout.completed = !workout.completed;
+    
+        await workout.save();
+    
+        res.status(200).json({workout, message: 'successfully updated workout in db'});
+    }
 }
 async function createWorkout(req, res) {
     const { exerciseName, numOfSets, numOfReps, weight } = req.body;
@@ -86,4 +123,4 @@ async function deleteWorkout(req, res){
 }
 
 
-module.exports = { getWorkouts, createWorkout, deleteWorkout, updateWorkout };
+module.exports = { getWorkouts, createWorkout, deleteWorkout, updateWorkout, resetWorkouts };

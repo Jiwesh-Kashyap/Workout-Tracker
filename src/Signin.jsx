@@ -1,13 +1,15 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useNavigate } from "react-router-dom"
+import { UserContext } from "./UserContext"
 
 export default function Signin() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const navigate = useNavigate()
+    const { setName } = useContext(UserContext) // Access global setName
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default HTML form submission
+        e.preventDefault();
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user/signin`, {
@@ -22,6 +24,7 @@ export default function Signin() {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("userName", data.user.name);
+                setName(data.user.name); // UPDATE GLOBAL STATE!
                 navigate("/");
             } else {
                 const data = await response.json()
