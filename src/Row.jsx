@@ -23,6 +23,7 @@ function Row({ item, index, handleDelete, dayName }) {
     const checkerClass = (isCompleted ? 'checker-list hide' : 'checker-list');
 
     const  handleComplete = async () => {
+        setIsCompleted(true);
         try{
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
@@ -39,6 +40,7 @@ function Row({ item, index, handleDelete, dayName }) {
         }
         catch(err){
             console.log('Error while updating row!', err);
+            setIsCompleted(false);
         }
     }
     function onDelete(workoutName) {

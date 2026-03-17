@@ -43,8 +43,6 @@ function Navbar({ name }) {
         </Link>
         {name !== "User" && (
             <button className="nav-link logout-btn" onClick={async () => {
-              // TODO: Implement your frontend logout logic here
-              // Example:
             try{
               const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user/logout`, {
                 method: "POST",

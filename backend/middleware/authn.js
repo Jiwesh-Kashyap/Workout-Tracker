@@ -1,4 +1,5 @@
 const { validateToken } = require("../services/authn");
+const isProduction = process.env.NODE_ENV === 'production';
 
 function checkForAuthenticationCookie(cookieName) {
     return (req, res, next) => {
@@ -18,8 +19,8 @@ function checkForAuthenticationCookie(cookieName) {
             console.error("[AUTH DEBUG] Token validation failed:", error.message);
             res.clearCookie(cookieName, {   //to delete the invalid token
                 httpOnly: true,
-                secure: true,
-                sameSite: 'none',
+                secure: isProduction,
+                sameSite: isProduction?'none':'lax',
                 path: '/'
             });
         }
