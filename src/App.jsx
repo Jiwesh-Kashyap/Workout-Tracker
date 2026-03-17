@@ -5,6 +5,7 @@ import Signup from "./Signup";
 import { useEffect, useState } from "react";
 import Schedule from "./Schedule";
 import Navbar from "./Navbar";
+import { UserContext } from "./UserContext";
 
 function App() {
   const [name, setName] = useState("User");
@@ -22,9 +23,10 @@ function App() {
       }
     };
     fetchName();
-  });
+  }, []); // Added empty dependency array so it only runs once!
 
   return (
+    <UserContext.Provider value={{ name, setName }}>
       <BrowserRouter>
         <Navbar name={name} />
         <Routes>
@@ -34,6 +36,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>
+    </UserContext.Provider>
   );
 }
 

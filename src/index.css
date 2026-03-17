@@ -26,6 +26,7 @@ body {
     font-family: var(--main-font);
     font-weight: 400;
     max-width: 100%;
+    overflow-x: hidden;
     color: rgba(255, 255, 255, 0.87);
 
     /* Background Styles */
@@ -38,8 +39,8 @@ body::before {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background-image: url("./set-tracker.jpg");
     background-size: cover;
     background-repeat: no-repeat;
@@ -703,7 +704,7 @@ td.weights-table {
     display: grid;
     grid-template-rows: 60px 1fr;
     left: 50%;
-    top: 50%;
+    top: 55%;
     transform: translate(-50%, -50%);
     flex-direction: column;
     min-height: 250px;
@@ -734,7 +735,7 @@ td.weights-table {
 }
 .delete-popup.show{
     opacity: 1;
-    z-index: 1000;
+    z-index: 10000;
     transform: translate(-50%, -50%); /* Settles into place */
 }
 
@@ -853,7 +854,7 @@ td.weights-table {
     height: 150px;
     row-gap: 20px;
     display: grid;
-    grid-template-columns: 50px auto;
+    grid-template-columns: 50px 1fr 50px;
     grid-template-rows: 80px 50px;
     place-items: center;
     background-color: rgba(36, 9, 62, 0.5);
@@ -882,6 +883,13 @@ td.weights-table {
     height: 15px;
     width: 15px;
     grid-area: 1/1/3/2;
+}
+.day-plan-delete {
+    grid-area: 1/3/3/4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
 }
 .day-list{
     display: flex;
@@ -940,7 +948,64 @@ td.weights-table {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(145, 28, 255, 0.4);
 }
-
+.no-plan{
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.no-plan-message{
+    width: max-content;
+    padding-left: 10px; padding-right: 10px;
+    padding-top: 5px; padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    background-color: rgba(55, 16, 103, 0.7);
+    height: max-content;
+    border-radius: 20px;
+}
+.no-plan-message > h1{
+    font-size: 2rem;
+}
+.loading-screen{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.loading-msg{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.spinner{
+    --a: 250deg;
+    --b: 5px;
+    padding: var(--b);
+    height: 50px;
+    aspect-ratio: 1;
+    width: 50px;
+    border-radius: 50%;
+    background-color: #430692;
+    animation: spin 1s infinite linear;
+    --_g:/var(--b) var(--b) no-repeat radial-gradient(50% 50%,#000 97%,#0000);
+    -webkit-mask: top var(--_g),
+        calc(50% + 50%*sin(var(--a)))
+        calc(50% - 50%*cos(var(--a))) var(--_g),
+        linear-gradient(#00000000 0 0) content-box intersect,
+        conic-gradient(#000000 var(--a),#0000 0);
+    mask: top var(--_g),
+        calc(50% + 50%*sin(var(--a)))
+        calc(50% - 50%*cos(var(--a))) var(--_g),
+        linear-gradient(#00000000 0 0) content-box intersect,
+        conic-gradient(#000000 var(--a),#0000 0);
+}
+@keyframes spin{
+    100% { transform: rotate(1turn); }
+}
 @media (max-width: 900px) {
     #layout {
         display: grid;

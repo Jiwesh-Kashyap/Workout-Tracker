@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "./UserContext";
 import "./Navbar.css";
 
 function Navbar({ name }) {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation(); // To dynamically show things based on route
+  const { setName } = useContext(UserContext); // Grab setName from context
+  const navigate = useNavigate(); // Grab navigate hook since <Navigate> is for rendering
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -32,9 +33,6 @@ function Navbar({ name }) {
         <Link to="/" className="nav-link schedule-btn" onClick={closeMenu}>
           Schedule
         </Link>
-        <Link to="/tracker" className="nav-link" onClick={closeMenu}>
-          Tracker
-        </Link>
         <Link to="/signin" className="nav-link" onClick={closeMenu}>
           Sign In
         </Link>
@@ -50,10 +48,10 @@ function Navbar({ name }) {
               });
               if(response.ok){
                 localStorage.removeItem("userName");
+                setName("User"); 
                 console.log("Successfully Logged Out!");
-                Navigate('/');
                 closeMenu();
-                window.location.href = '/signin';
+                navigate('/signin');
               }
               else{
                 console.log("Error while logging out");

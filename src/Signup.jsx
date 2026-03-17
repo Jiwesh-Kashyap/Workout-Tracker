@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 export default function Signin() {
-    const [name, setName] = useState("");
+    const [name, setNameInput] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const { setName } = useContext(UserContext); // Access global setName
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent default HTML form submission
@@ -22,6 +24,7 @@ export default function Signin() {
             if (response.ok) {
                 await response.json();
                 localStorage.setItem("userName", name);
+                setName(name); // UPDATE GLOBAL STATE!
                 navigate("/");
             } else {
                 const data = await response.json();
@@ -84,7 +87,7 @@ export default function Signin() {
                             placeholder="Jimmy McGill"
                             required
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e) => setNameInput(e.target.value)}
                             style={inputStyle}
                         />
                         <label htmlFor="email">Email</label>

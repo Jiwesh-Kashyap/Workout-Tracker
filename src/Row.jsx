@@ -23,7 +23,10 @@ function Row({ item, index, handleDelete, dayName }) {
     const checkerClass = (isCompleted ? 'checker-list hide' : 'checker-list');
 
     const  handleComplete = async () => {
-        setIsCompleted(true);
+        //Optimistic AI
+        const previousState = isCompleted;
+        setIsCompleted(!isCompleted);
+        
         try{
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
@@ -34,13 +37,16 @@ function Row({ item, index, handleDelete, dayName }) {
             })
             if(response.ok){
                 console.log('Row updated successfully!');
+            } else {
+                 throw new Error("Backend response not ok");
             }
+            
             const { workout } = await response.json();
             setIsCompleted(workout.completed);
         }
         catch(err){
             console.log('Error while updating row!', err);
-            setIsCompleted(false);
+            setIsCompleted(previousState);
         }
     }
     function onDelete(workoutName) {

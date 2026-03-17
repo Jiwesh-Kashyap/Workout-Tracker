@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import DayPlan from "./DayPlan";
 import Lenis from 'lenis';
 import Footer from "./Footer";
+import { UserContext } from "./UserContext";
+import { Link } from "react-router-dom";
 
 function Schedule() {
     const [dayName, setDayName] = useState(null);
     const [message, setMessage] = useState(null);
     const [plans, setPlans] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [showAuthPopup, setShowAuthPopup] = useState(false);
+    const { name } = useContext(UserContext);
 
     useEffect(() =>{
         const lenis = new Lenis({
@@ -30,6 +35,7 @@ function Schedule() {
 
 
     useEffect(() => {
+        setIsLoading(false);
         const fetchSchedule = async () => {
             try{
                 const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
@@ -52,6 +58,13 @@ function Schedule() {
     // }
     const addPlan = async (e) => {
         e.preventDefault();
+        
+        // Block unauthenticated users
+        if (name === "User") {
+            setShowAuthPopup(true);
+            return;
+        }
+        
         if (!validateInput()) return;
 
         const newPlan = { dayName, message };
@@ -86,21 +99,78 @@ function Schedule() {
         else return true;
     }
 
+    const handleDelete = async (planName) => {
+        // Optimistic UI for delete
+        const previousPlans = [...plans];
+        setPlans(plans.filter(p => p.dayName !== planName));
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dayName: planName })
+            });
+
+            if (!response.ok) {
+                console.log("Failed to delete plan from backend");
+                setPlans(previousPlans); // Rollback
+            }
+        } catch (err) {
+            console.log("Error deleting plan:", err);
+            setPlans(previousPlans); // Rollback
+        }
+    };
+
     const planList = plans.map((item, ind) => {
         if (React.isValidElement(item)) {
             return <li key={ind}>{item}</li>;
         }
         return (
             <li key={item._id || ind}>
-                <DayPlan name={item.dayName} content={item.message} checker={item.checker} />
+                <DayPlan name={item.dayName} content={item.message} checker={item.checker} onDelete={handleDelete} />
             </li>
         );
     });
 
 
+    if(isLoading){
+        return(
+            <div className="loading-screen">
+                <h2 className="loading-msg">Loading...</h2>
+                {/* spinner */}
+                <div className="spinner"></div>
+            </div>
+        )
+    }
+
     return (
         <div className="schedule">
-            <ul className="day-list">{planList}</ul>
+            {/* AUTHENTICATION REQUIRED POPUP */}
+            {showAuthPopup && (
+                <div className="delete-popup show">
+                    <div className="delete-heading">
+                        <p>SIGN IN REQUIRED</p>
+                    </div>
+                    <div className="delete-message">
+                        <p>You must be signed in to create and save a routine.</p>
+                        <div className="delete-buttons" style={{marginTop: '20px'}}>
+                            <Link to="/signin" className="delete-confirm" style={{textDecoration: 'none', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Sign In</Link>
+                            <button className="delete-cancel" onClick={() => setShowAuthPopup(false)}>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {plans.length === 0 ? (
+                <div className="no-plan">
+                    <div className="no-plan-message">
+                        <h1>ADD YOUR FIRST ROUTINE NOW!</h1>
+                    </div>
+                </div>
+            ) : (
+                <ul className="day-list">{planList}</ul>
+            )}
+
             <form action="/" method="POST" className="schedule-form">
                 <input
                     type="text"
