@@ -1188,4 +1188,24 @@ td.weights-table {
         gap: 5px;
         grid-template-columns: 1fr 1fr 1fr 2fr;
     }
+
+    /* Schedule Form Responsive Makeover */
+    .schedule-form {
+        flex-direction: column;
+        row-gap: 15px;
+        width: 90vw; /* Match the day-plan cards width on mobile */
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .schedule-form #day-name,
+    .schedule-form #day-plan-message {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .schedule-form .add-day-plan-button {
+        width: 100%;
+        margin-top: 5px;
+    }
 }

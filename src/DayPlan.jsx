@@ -44,7 +44,7 @@ function DayPlan({ name, content, checker, onDelete }) {
       
       {/* Container to stop the click from bubbling to the parent div */}
       <div className="day-plan-delete" onClick={(e) => e.stopPropagation()}>
-        <DeleteImage className="delete" onDelFunc={() => onDelete(name)} />
+        <DeleteImage className="delete" onDelFunc={() => onDelete(name)} type="routine" />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { createPortal } from "react-dom";
 
-function DeletePopUp({ varClass, onDelFunc, onCancel }) {
+function DeletePopUp({ varClass, onDelFunc, onCancel, type = "exercise" }) {
 
     const handleCancel = () => {
         onCancel();
@@ -18,7 +18,7 @@ function DeletePopUp({ varClass, onDelFunc, onCancel }) {
                 <p>WARNING!</p>
             </div>
             <div className="delete-message">
-                <p>This will delete this exercise permanently!</p>
+                <p>This will delete this {type} permanently!</p>
                 <div className="delete-buttons">
                     <button className="delete-confirm" onClick={handleConfirm}>CONFIRM</button>
                     <button className="delete-cancel" onClick={handleCancel}>CANCEL</button>

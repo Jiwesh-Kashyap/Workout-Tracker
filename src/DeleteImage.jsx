@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import deleteImg from './assets/delete.png';
 import DeletePopUp from './DeletePopUp';
 
-function DeleteImage({className, onDelFunc}) {
+function DeleteImage({className, onDelFunc, type = "exercise"}) {
     const [display, setDisplay] = useState(false);
     const [popupDisplay,setPopupDisplay] = useState(false);
 
@@ -27,8 +27,8 @@ function DeleteImage({className, onDelFunc}) {
                 onMouseEnter={toggleDisplay}
                 onMouseLeave={toggleDisplay}
                 onClick={handleClick} />
-            <div className={`completed ${display ? 'active' : ''}`}><p>delete exercise</p></div>
-            <DeletePopUp varClass={`${popupDisplay ? 'show' : ''}`} onDelFunc={onDelFunc} onCancel={closePopup} />
+            <div className={`completed ${display ? 'active' : ''}`}><p>delete {type}</p></div>
+            <DeletePopUp varClass={`${popupDisplay ? 'show' : ''}`} onDelFunc={onDelFunc} onCancel={closePopup} type={type} />
         </div>
 
     );
