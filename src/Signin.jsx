@@ -24,6 +24,7 @@ export default function Signin() {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("userName", data.user.name);
+                localStorage.setItem("token", data.token); // Store token
                 setName(data.user.name); // UPDATE GLOBAL STATE!
                 navigate("/");
             } else {

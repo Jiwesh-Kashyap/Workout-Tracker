@@ -48,6 +48,7 @@ function Navbar({ name }) {
               });
               if(response.ok){
                 localStorage.removeItem("userName");
+                localStorage.removeItem("token");
                 setName("User"); 
                 console.log("Successfully Logged Out!");
                 closeMenu();

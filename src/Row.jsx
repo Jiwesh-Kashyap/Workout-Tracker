@@ -31,8 +31,10 @@ function Row({ item, index, handleDelete, dayName }) {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
                 body: JSON.stringify({name: item.exerciseName, intent: "COMPLETE_WORKOUT"}),
-                headers: {"Content-Type": "application/json"},
-                credentials: 'include',
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
+                },
                 intent: "COMPLETE_WORKOUT"
             })
             if(response.ok){
@@ -61,7 +63,6 @@ function Row({ item, index, handleDelete, dayName }) {
         try{
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
-                credentials: 'include',
                 body: JSON.stringify({ 
                     dayName, 
                     intent: "EDIT_WORKOUT",
@@ -70,7 +71,10 @@ function Row({ item, index, handleDelete, dayName }) {
                     numOfSets: numOfSets,
                     weight: weight,
                 }),
-                headers: {"Content-Type": "application/json"},
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}` 
+                },
             })
             if(response.ok){
                 console.log("Workout updated successfully!");

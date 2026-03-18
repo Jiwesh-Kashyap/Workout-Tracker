@@ -9,9 +9,9 @@ function Output({list, onDelete, dayName, handleReset}) {
     const handleDelete = async (workoutName) => {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
             method: "DELETE",
-            credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({ name: workoutName }),
         });

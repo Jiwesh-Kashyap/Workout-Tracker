@@ -16,7 +16,7 @@ function Tracker() {
         const fetchWorkouts = async () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
-                    credentials: 'include'
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
                 if (response.ok) {
                     const json = await response.json();
@@ -61,10 +61,10 @@ function Tracker() {
             console.log("Sending POST to backend:", workoutData);
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'POST',
-                credentials: 'include',
-                body: JSON.stringify(workoutData), 
+                body: JSON.stringify(workoutData),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
 
@@ -101,8 +101,10 @@ function Tracker() {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PATCH',
                 body: JSON.stringify({dayName}),
-                credentials: 'include',
-                headers: {'Content-Type':'application/json'},
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
             });
             
             if (!response.ok) {

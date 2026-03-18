@@ -39,7 +39,7 @@ function Schedule() {
         const fetchSchedule = async () => {
             try{
                 const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
-                    credentials: 'include',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 })
                 if(response.ok){
                     const json = await response.json();
@@ -72,9 +72,11 @@ function Schedule() {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newPlan),
-                credentials: 'include'
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(newPlan)
             });
 
             if (response.ok) {
@@ -107,8 +109,10 @@ function Schedule() {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
                 method: 'DELETE',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
                 body: JSON.stringify({ dayName: planName })
             });
 
