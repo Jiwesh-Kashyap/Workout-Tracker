@@ -13,7 +13,7 @@ function Schedule() {
     const [showAuthPopup, setShowAuthPopup] = useState(false);
     const { name } = useContext(UserContext);
 
-    useEffect(() =>{
+    useEffect(() => {
         const lenis = new Lenis({
             duration: 0.7,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -37,16 +37,16 @@ function Schedule() {
     useEffect(() => {
         setIsLoading(false);
         const fetchSchedule = async () => {
-            try{
+            try {
                 const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
-                    credentials: 'include',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 })
-                if(response.ok){
+                if (response.ok) {
                     const json = await response.json();
                     setPlans(json);
                 }
             }
-            catch(error){
+            catch (error) {
                 console.log('schedule.jsx=> Caught an error while making request: ', error);
             }
         }
@@ -58,13 +58,13 @@ function Schedule() {
     // }
     const addPlan = async (e) => {
         e.preventDefault();
-        
+
         // Block unauthenticated users
         if (name === "User") {
             setShowAuthPopup(true);
             return;
         }
-        
+
         if (!validateInput()) return;
 
         const newPlan = { dayName, message };
@@ -72,9 +72,11 @@ function Schedule() {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newPlan),
-                credentials: 'include'
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(newPlan)
             });
 
             if (response.ok) {
@@ -92,7 +94,7 @@ function Schedule() {
         setMessage('');
     };
     const validateInput = () => {
-        if(!dayName){
+        if (!dayName) {
             window.alert("Day name cannot be null!");
             return false;
         }
@@ -107,8 +109,10 @@ function Schedule() {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
                 method: 'DELETE',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
                 body: JSON.stringify({ dayName: planName })
             });
 
@@ -134,8 +138,8 @@ function Schedule() {
     });
 
 
-    if(isLoading){
-        return(
+    if (isLoading) {
+        return (
             <div className="loading-screen">
                 <h2 className="loading-msg">Loading...</h2>
                 {/* spinner */}
@@ -154,8 +158,8 @@ function Schedule() {
                     </div>
                     <div className="delete-message">
                         <p>You must be signed in to create and save a routine.</p>
-                        <div className="delete-buttons" style={{marginTop: '20px'}}>
-                            <Link to="/signin" className="delete-confirm" style={{textDecoration: 'none', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Sign In</Link>
+                        <div className="delete-buttons" style={{ marginTop: '20px' }}>
+                            <Link to="/signin" className="delete-confirm" style={{ textDecoration: 'none', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Sign In</Link>
                             <button className="delete-cancel" onClick={() => setShowAuthPopup(false)}>Cancel</button>
                         </div>
                     </div>

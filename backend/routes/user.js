@@ -14,7 +14,7 @@ router.post("/signin", async (req, res) => {
         const token = await USER.matchPasswordAndGenerateToken(email, password);
         return res.cookie("token", token, {
             httpOnly: true,
-            sameSite: isProduction? 'none':'lax',   //same site 'none' requires secure as true
+            sameSite: isProduction ? 'none' : 'lax',   //same site 'none' requires secure as true
             secure: isProduction, // Required for cross-site cookies on HTTPS
             path: "/"
         }).status(200).json({ message: "Login Successful", user: { name: findUser.name, email: findUser.email } });
@@ -27,7 +27,7 @@ router.post("/logout", async (req, res) => {
     return res.cookie("token", "", {
         httpOnly: true,
         secure: isProduction,
-        sameSite: isProduction? 'none':'lax',
+        sameSite: isProduction ? 'none' : 'lax',
         expires: new Date(0),
         path: "/",
     }).status(200).json({ message: "Successfully logged out" });
@@ -55,7 +55,7 @@ router.post("/signup", async (req, res, next) => {
         return res.status(201).cookie("token", token, {
             httpOnly: true,
             secure: isProduction,
-            sameSite: isProduction? 'none':'lax',
+            sameSite: isProduction ? 'none' : 'lax',
             path: "/"
         }).json({ message: "User created successfully" });
     } catch (error) {

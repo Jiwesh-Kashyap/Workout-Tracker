@@ -650,6 +650,7 @@ td.weights-table {
 .footer {
     background-color: rgb(10, 10, 10);
     position: relative;
+    width: 100%;
 }
 
 .footer-child {

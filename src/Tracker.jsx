@@ -16,7 +16,7 @@ function Tracker() {
         const fetchWorkouts = async () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
-                    credentials: 'include'
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
                 if (response.ok) {
                     const json = await response.json();
@@ -61,10 +61,10 @@ function Tracker() {
             console.log("Sending POST to backend:", workoutData);
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'POST',
-                credentials: 'include',
-                body: JSON.stringify(workoutData), 
+                body: JSON.stringify(workoutData),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
 
@@ -80,19 +80,19 @@ function Tracker() {
             console.error("Network or Fetch Error:", error);
         }
     }
-    function deleteExercise(workoutName){
-        setPlan(c => c.filter((row) => row.exerciseName!==workoutName));
+    function deleteExercise(workoutName) {
+        setPlan(c => c.filter((row) => row.exerciseName !== workoutName));
     }
-    
+
     const handleReset = async () => {   //optimistic UI
         const prevPlan = [...plan];
-        
+
         const optimisticallyResetPlan = plan.map(workout => ({
             ...workout,
             status: "pending", // Or whatever your property name for completed state is
             isCompleted: false
         }));
-        
+
         setPlan(optimisticallyResetPlan);
         setGlobalReset(true);
 
@@ -100,30 +100,32 @@ function Tracker() {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PATCH',
-                body: JSON.stringify({dayName}),
-                credentials: 'include',
-                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ dayName }),
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
             });
-            
+
             if (!response.ok) {
                 throw new Error('Failed to reset on backend');
             }
-            
+
             //Re-sync with backend data just to be safe
             const workouts = await response.json();
             setPlan(workouts);
-            
-        } catch(err) {
+
+        } catch (err) {
             //Rollback if error
             console.log('Error in resetting progress!', err);
             setPlan(prevPlan);
-            setGlobalReset(false); 
+            setGlobalReset(false);
         }
     }
 
     return (
-        <ResetContext.Provider value = {{globalReset, setGlobalReset}}>
-            <Header dayName={dayName}/>
+        <ResetContext.Provider value={{ globalReset, setGlobalReset }}>
+            <Header dayName={dayName} />
             <svg
                 width="100%"
                 height="20"
@@ -141,7 +143,7 @@ function Tracker() {
             <div id="layout">
                 <Input onAddExercise={addExercise} />
                 <hr id="divider" />
-                <Output list={plan} dayName={dayName} handleReset={handleReset} onDelete={(workoutName) => deleteExercise(workoutName)}/>
+                <Output list={plan} dayName={dayName} handleReset={handleReset} onDelete={(workoutName) => deleteExercise(workoutName)} />
             </div>
             <Footer />
         </ResetContext.Provider>
