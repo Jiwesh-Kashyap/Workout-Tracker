@@ -1,7 +1,14 @@
-This is the workout tracker project I am building using MERN stack.
-
+#Workout Tracker
+##This is the workout tracker project created by me using MERN stack.
 Website link - https://workout-tracker-5ym.pages.dev/
 
-For now, I am only completing the part which requires CRUD operations, constructing relationship between entities in MongoDB.
+*Many people going to the gym or doing calisthenics don't even note their current status. They just keep on doing the same things they did the previous week and the week before it.
+*To solve this people need to track their workouts by noting or saving them down.
+*Workout Tracker does the exact thing. You can add your routine with daily plans in here to know what to do next. You can now do Progressive Overload 'efficiently' and 'cleanly'.
 
-Will add more features and functionalities once I learn more about advanced backend.
+##Tech Stack used:
+* Frontend - React
+* Backend - Express
+* Database - MongoDB
+
+More features will come hopefully come soon!
