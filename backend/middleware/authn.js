@@ -20,7 +20,7 @@ function checkForAuthenticationCookie(cookieName) {
             res.clearCookie(cookieName, {   //to delete the invalid token
                 httpOnly: true,
                 secure: isProduction,
-                sameSite: isProduction?'none':'lax',
+                sameSite: isProduction ? 'none' : 'lax',
                 path: '/'
             });
         }

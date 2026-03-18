@@ -22,8 +22,9 @@ export default function Signin() {
                 body: JSON.stringify({ name, email, password }),
             });
             if (response.ok) {
-                await response.json();
+                const data = await response.json();
                 localStorage.setItem("userName", name);
+                localStorage.setItem("token", data.token);
                 setName(name); // UPDATE GLOBAL STATE!
                 navigate("/");
             } else {

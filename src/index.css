@@ -650,6 +650,7 @@ td.weights-table {
 .footer {
     background-color: rgb(10, 10, 10);
     position: relative;
+    width: 100%;
 }
 
 .footer-child {
@@ -843,8 +844,9 @@ td.weights-table {
 .schedule{
     display: flex;
     min-height: 100vh;
-    justify-content: center;
     flex-direction: column;
+    align-items: center;
+    padding-top: 50px; /* Space below navbar */
     margin: 0;
 }
 .day-plan{

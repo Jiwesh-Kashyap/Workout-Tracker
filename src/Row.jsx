@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import DoneImage from "./DoneImage";
 import DeleteImage from "./DeleteImage";
 import EditImage from "./EditImage";
@@ -22,29 +22,31 @@ function Row({ item, index, handleDelete, dayName }) {
     const doneClass = (isCompleted ? 'done hide' : 'done');
     const checkerClass = (isCompleted ? 'checker-list hide' : 'checker-list');
 
-    const  handleComplete = async () => {
+    const handleComplete = async () => {
         //Optimistic AI
         const previousState = isCompleted;
         setIsCompleted(!isCompleted);
-        
-        try{
+
+        try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
-                body: JSON.stringify({name: item.exerciseName, intent: "COMPLETE_WORKOUT"}),
-                headers: {"Content-Type": "application/json"},
-                credentials: 'include',
+                body: JSON.stringify({ name: item.exerciseName, intent: "COMPLETE_WORKOUT" }),
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
+                },
                 intent: "COMPLETE_WORKOUT"
             })
-            if(response.ok){
+            if (response.ok) {
                 console.log('Row updated successfully!');
             } else {
-                 throw new Error("Backend response not ok");
+                throw new Error("Backend response not ok");
             }
-            
+
             const { workout } = await response.json();
             setIsCompleted(workout.completed);
         }
-        catch(err){
+        catch (err) {
             console.log('Error while updating row!', err);
             setIsCompleted(previousState);
         }
@@ -54,25 +56,27 @@ function Row({ item, index, handleDelete, dayName }) {
         setIsDeleted(true);
     }
 
-    const editFormClass = `delete-popup edit-form ${edit ? 'show': ''}`;
+    const editFormClass = `delete-popup edit-form ${edit ? 'show' : ''}`;
 
     const handleEdit = async () => {
 
-        try{
+        try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
-                credentials: 'include',
-                body: JSON.stringify({ 
-                    dayName, 
+                body: JSON.stringify({
+                    dayName,
                     intent: "EDIT_WORKOUT",
                     name: item.exerciseName,
                     numOfReps: numOfReps,
                     numOfSets: numOfSets,
                     weight: weight,
                 }),
-                headers: {"Content-Type": "application/json"},
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}` 
+                },
             })
-            if(response.ok){
+            if (response.ok) {
                 console.log("Workout updated successfully!");
                 const data = await response.json();
                 item.numOfReps = data.numOfReps;
@@ -81,12 +85,12 @@ function Row({ item, index, handleDelete, dayName }) {
                 setEdit(false);
             }
         }
-        catch(err){
+        catch (err) {
             console.log("Error while updating workout!", err);
         }
     }
- 
-    const finalClassName = `rows ${isCompleted ? 'row-completed' : ''} ${isDeleted? 'deleted': ''}`;
+
+    const finalClassName = `rows ${isCompleted ? 'row-completed' : ''} ${isDeleted ? 'deleted' : ''}`;
 
     return (
         <tr className={finalClassName}>
@@ -99,9 +103,9 @@ function Row({ item, index, handleDelete, dayName }) {
             {/* We pass the handleComplete function down */}
             <td className='action-cell'>
                 <DoneImage className={doneClass} onCheckFunc={handleComplete} />
-                <DeleteImage className={deleteClass} onDelFunc={()=>onDelete(item.exerciseName)}/>
+                <DeleteImage className={deleteClass} onDelFunc={() => onDelete(item.exerciseName)} />
                 <EditImage className="edit-row" onClickFunc={() => setEdit(true)} />
-                <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete}/>
+                <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete} />
 
                 <div className={editFormClass}>
                     <div className="delete-heading edit-heading">
