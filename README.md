@@ -1,3 +1,7 @@
-This is the workout tracker project built using REACT.js.
-Currently it is in front-end phase.
-I will be using a data base in future so that it can store the workout info and you can track your weekly progress.
+This is the workout tracker project I am building using MERN stack.
+
+Website link - https://workout-tracker-5ym.pages.dev/
+
+For now, I am only completing the part which requires CRUD operations, constructing relationship between entities in MongoDB.
+
+Will add more features and functionalities once I learn more about advanced backend.

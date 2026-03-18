@@ -3,7 +3,7 @@ import Row from './Row';
 import ResetPopUp from './ResetPopUp';
 import Button from './Button';
 
-function Output({list, onDelete, dayName, handleReset}) {
+function Output({ list, onDelete, dayName, handleReset }) {
     const [showReset, setShowReset] = useState(false);
 
     const handleDelete = async (workoutName) => {
@@ -15,23 +15,23 @@ function Output({list, onDelete, dayName, handleReset}) {
             },
             body: JSON.stringify({ name: workoutName }),
         });
-        if(response.ok){
+        if (response.ok) {
             //a pop up of successfully deletion
             onDelete(workoutName);
         }
-        else{
+        else {
             console.log("OUTPUT.jsx->Error while deleting exercise!");
         }
     }
-    return(<>
+    return (<>
         {showReset && (
-            <ResetPopUp 
-                varClass="show" 
-                onConfirm={ () => handleReset() }
-                onCancel={() => setShowReset(false)} 
+            <ResetPopUp
+                varClass="show"
+                onConfirm={() => handleReset()}
+                onCancel={() => setShowReset(false)}
             />
         )}
-        <div id = "output">
+        <div id="output">
             <button className='output-reset' onClick={() => setShowReset(true)}>
                 Reset Progress
             </button>
@@ -50,8 +50,8 @@ function Output({list, onDelete, dayName, handleReset}) {
                 </thead>
 
                 <tbody>
-                    {list.map((item,i)=> (
-                        <Row key = {item._id} item={item} index = {i} handleDelete={handleDelete} dayName = {dayName}/>
+                    {list.map((item, i) => (
+                        <Row key={item._id} item={item} index={i} handleDelete={handleDelete} dayName={dayName} />
                     ))}
                 </tbody>
 

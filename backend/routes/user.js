@@ -26,7 +26,7 @@ router.post("/logout", async (req, res) => {
     return res.cookie("token", "", {
         httpOnly: true,
         secure: isProduction,
-        sameSite: isProduction? 'none':'lax',
+        sameSite: isProduction ? 'none' : 'lax',
         expires: new Date(0),
         path: "/",
     }).status(200).json({ message: "Successfully logged out" });
