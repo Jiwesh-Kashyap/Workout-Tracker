@@ -1057,6 +1057,25 @@ td.weights-table {
         grid-template-columns: auto;
         row-gap: 10px;
     }
+
+    /* Amount Slider Responsive Makeover */
+    .amount-slider {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        row-gap: 15px;
+    }
+    .amount-slider-controls {
+        grid-column: 1 / -1;
+        width: 100%;
+        justify-content: center;
+    }
+    #slider {
+        width: 100%;
+    }
+    .amount-slider label {
+        width: auto;
+        justify-content: center;
+    }
 }
 
 @keyframes shake-animation {

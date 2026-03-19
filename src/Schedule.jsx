@@ -3,7 +3,7 @@ import DayPlan from "./DayPlan";
 import Lenis from 'lenis';
 import Footer from "./Footer";
 import { UserContext } from "./UserContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Schedule() {
     const [dayName, setDayName] = useState(null);
@@ -13,6 +13,8 @@ function Schedule() {
     const [showAuthPopup, setShowAuthPopup] = useState(false);
     const { name } = useContext(UserContext);
 
+    const navigate = useNavigate();
+    
     useEffect(() => {
         const lenis = new Lenis({
             duration: 0.7,
@@ -45,9 +47,18 @@ function Schedule() {
                     setPlans(json);
                     setIsLoading(false);
                 }
+                else if (response.status === 400 || response.status === 401) {
+                    console.error("Token expired or invalid!");
+                    localStorage.removeItem('token'); 
+                    localStorage.removeItem('userName');
+                    navigate('/signin'); 
+                }
             }
             catch (error) {
                 console.log('schedule.jsx=> Caught an error while making request: ', error);
+            }
+            finally{
+                setIsLoading(false);
             }
         }
         fetchSchedule();
