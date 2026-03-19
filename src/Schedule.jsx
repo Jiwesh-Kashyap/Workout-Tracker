@@ -35,7 +35,6 @@ function Schedule() {
 
 
     useEffect(() => {
-        setIsLoading(false);
         const fetchSchedule = async () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
@@ -44,6 +43,7 @@ function Schedule() {
                 if (response.ok) {
                     const json = await response.json();
                     setPlans(json);
+                    setIsLoading(false);
                 }
             }
             catch (error) {
