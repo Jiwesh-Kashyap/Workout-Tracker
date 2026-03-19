@@ -45,9 +45,18 @@ function Schedule() {
                     const json = await response.json();
                     setPlans(json);
                 }
+                else if (response.status === 400 || response.status === 401) {
+                    console.error("Token expired or invalid!");
+                    localStorage.removeItem('token'); 
+                    localStorage.removeItem('userName');
+                    navigate('/signin'); 
+                }
             }
             catch (error) {
                 console.log('schedule.jsx=> Caught an error while making request: ', error);
+            }
+            finally{
+                setIsLoading(false);
             }
         }
         fetchSchedule();
