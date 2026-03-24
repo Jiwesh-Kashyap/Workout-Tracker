@@ -100,7 +100,7 @@ function Tracker() {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PATCH',
-                body: JSON.stringify({ dayName }),
+                body: JSON.stringify({dayName}),
                 headers: { 
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`

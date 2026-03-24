@@ -30,7 +30,7 @@ function Row({ item, index, handleDelete, dayName }) {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
-                body: JSON.stringify({ name: item.exerciseName, intent: "COMPLETE_WORKOUT" }),
+                body: JSON.stringify({name: item.exerciseName, intent: "COMPLETE_WORKOUT"}),
                 headers: { 
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${localStorage.getItem('token')}`
@@ -63,8 +63,8 @@ function Row({ item, index, handleDelete, dayName }) {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
                 method: 'PUT',
-                body: JSON.stringify({
-                    dayName,
+                body: JSON.stringify({ 
+                    dayName, 
                     intent: "EDIT_WORKOUT",
                     name: item.exerciseName,
                     numOfReps: numOfReps,

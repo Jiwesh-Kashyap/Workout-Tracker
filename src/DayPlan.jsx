@@ -9,20 +9,20 @@ function DayPlan({ name, content, checker, onDelete }) {
         setCheck(checker || false);
     }, [checker]);
 
-    const navigate = useNavigate();
-    const handleClick = async () => {
-        navigate(`/tracker/${name}`);
-    };
-    const checkFn = async () => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
-                method: "PUT",
-                body: JSON.stringify({ dayName: name }),
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('token')}`
-                },
-            });
+  const navigate = useNavigate();
+  const handleClick = async () => {
+    navigate(`/tracker/${name}`);
+  };
+  const checkFn = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
+        method: "PUT",
+        body: JSON.stringify({ dayName: name }),
+        headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+        },
+      });
 
             if (response.ok) {
                 const fetchedCheck = await response.json();

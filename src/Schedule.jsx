@@ -45,6 +45,7 @@ function Schedule() {
                 if (response.ok) {
                     const json = await response.json();
                     setPlans(json);
+                    setIsLoading(false);
                 }
                 else if (response.status === 400 || response.status === 401) {
                     console.error("Token expired or invalid!");

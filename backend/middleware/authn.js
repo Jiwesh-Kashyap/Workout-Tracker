@@ -1,13 +1,21 @@
 const { validateToken } = require("../services/authn");
 const isProduction = process.env.NODE_ENV === 'production';
 
-function checkForAuthenticationCookie(cookieName) {
+function checkForAuthenticationCookie() {
     return (req, res, next) => {
-        const tokenCookieValue = req.cookies[cookieName];
-        console.log(`[AUTH DEBUG] Checking cookie '${cookieName}':`, tokenCookieValue ? "Found" : "Missing");
+        // Fallback to cookie for backwards compatibility 
+        let tokenCookieValue = req.cookies && req.cookies["token"];
+        
+        // Priority to Authorization Header
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            tokenCookieValue = authHeader.split(' ')[1];
+        }
+
+        console.log(`[AUTH DEBUG] Checking authentication token:`, tokenCookieValue ? "Found" : "Missing");
 
         if (!tokenCookieValue) {
-            console.log("[AUTH DEBUG] No token cookie, proceeding without auth.");
+            console.log("[AUTH DEBUG] No token found, proceeding without auth.");
             return next();
         }
 
@@ -17,7 +25,7 @@ function checkForAuthenticationCookie(cookieName) {
             console.log("[AUTH DEBUG] Token validated for user:", userPayload.email);
         } catch (error) {
             console.error("[AUTH DEBUG] Token validation failed:", error.message);
-            res.clearCookie(cookieName, {   //to delete the invalid token
+            res.clearCookie("token", {
                 httpOnly: true,
                 secure: isProduction,
                 sameSite: isProduction ? 'none' : 'lax',
