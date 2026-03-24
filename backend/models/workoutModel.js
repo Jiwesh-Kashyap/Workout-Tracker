@@ -29,6 +29,10 @@ const workoutSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "schedule",
     },
+    order: {
+        type: Number,
+        default: 0,
+    },
 }, {timestamps: true});
 
 const workoutModel = mongoose.model('workout', workoutSchema);

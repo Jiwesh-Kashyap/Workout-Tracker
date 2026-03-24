@@ -3,7 +3,7 @@ import Row from './Row';
 import ResetPopUp from './ResetPopUp';
 import { ReactSortable } from 'react-sortablejs';
 
-function Output({ list, onDelete, dayName, handleReset }) {
+function Output({ list, setList, onDelete, dayName, handleReset }) {
     const [showReset, setShowReset] = useState(false);
 
     const handleDelete = async (workoutName) => {
@@ -23,6 +23,30 @@ function Output({ list, onDelete, dayName, handleReset }) {
             console.log("OUTPUT.jsx->Error while deleting exercise!");
         }
     }
+
+    const handleEndState = async (freshList) => {
+        const orderOfObjectIds = [];
+        for(let i = 0; i<freshList.length; i++){
+            orderOfObjectIds.push(freshList[i]._id);
+        }
+
+        try{
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`,{
+            method:'PUT',
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({intent:"SORT_WORKOUT", orderOfObjectIds: orderOfObjectIds})
+        })
+        if(response.ok){
+            console.log('Sorting successfull!');
+        }
+        } catch(err){
+        console.log('Error while sorting: ', err);
+        }
+    }
+
     return (<>
         {showReset && (
             <ResetPopUp
@@ -49,13 +73,16 @@ function Output({ list, onDelete, dayName, handleReset }) {
                     </tr>
                 </thead>
 
-                <tbody>
-                    <ReactSortable>
+                <ReactSortable tag="tbody" 
+                    list={list} 
+                    setList={(newList) => {
+                        setList(newList);
+                        handleEndState(newList);
+                    }}>
                     {list.map((item, i) => (
                         <Row key={item._id} item={item} index={i} handleDelete={handleDelete} dayName={dayName} />
                     ))}
-                    </ReactSortable>
-                </tbody>
+                </ReactSortable>
 
                 <tfoot>
                     {/* <tr id='end'>END</tr> */}
