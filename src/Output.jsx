@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Row from './Row';
 import ResetPopUp from './ResetPopUp';
-import Button from './Button';
+import { ReactSortable } from 'react-sortablejs';
 
 function Output({ list, onDelete, dayName, handleReset }) {
     const [showReset, setShowReset] = useState(false);
@@ -50,9 +50,11 @@ function Output({ list, onDelete, dayName, handleReset }) {
                 </thead>
 
                 <tbody>
+                    <ReactSortable>
                     {list.map((item, i) => (
                         <Row key={item._id} item={item} index={i} handleDelete={handleDelete} dayName={dayName} />
                     ))}
+                    </ReactSortable>
                 </tbody>
 
                 <tfoot>

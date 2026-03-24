@@ -12,7 +12,7 @@ async function getWorkouts(req, res) {
         return res.status(404).json({ error: "Schedule not found!" });
     }
 
-    const workouts = await Workout.find({ scheduleID: schedule._id }).sort({ createdAt: -1 });    //newest first
+    const workouts = await Workout.find({ scheduleID: schedule._id }).sort({ createdAt: 1 });    //oldest first
     res.status(200).json(workouts);
 }
 async function resetWorkouts(req, res){
@@ -20,7 +20,7 @@ async function resetWorkouts(req, res){
 
     const { dayName } = req.params; 
     const schedule = await Schedule.findOne({ dayName, createdBy: req.user._id });
-    const workouts = await Workout.find({scheduleID: schedule._id}).sort({createdAt: -1});
+    const workouts = await Workout.find({scheduleID: schedule._id}).sort({ createdAt: 1 });
 
     for (let index = 0; index < workouts.length; index++) {
         workouts[index].completed = false;

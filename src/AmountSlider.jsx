@@ -46,7 +46,7 @@ function AmountSlider({sliderVal, setSliderVal}){
 
             {/* REDUCE */}
         <div className="amount-slider-controls">
-        <button id="reduce-button" 
+        <button id="reduce-button" type='button'
             onMouseUp={stopChange} onMouseDown={startReducing}>
                 <img src={downImg} alt="reduce weight"  className="control-weight"/>
             </button>
@@ -55,7 +55,7 @@ function AmountSlider({sliderVal, setSliderVal}){
             onChange= {handleChange}/>
 
             {/* ADD */}
-        <button id="add-button"
+        <button id="add-button" type='button'
             onMouseUp={stopChange} onMouseDown={startAdding}>
                 <img src={upImg} alt="increase weight" className="control-weight"/>
             </button>
