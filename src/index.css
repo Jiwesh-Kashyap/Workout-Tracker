@@ -388,7 +388,8 @@ textarea:focus {
     transition: grid-template-rows 1s ease-in-out;
     display: grid;
     grid-template-columns: 40px 220px 90px 90px 130px 1px auto;
-    grid-template-rows: 30px 1px 50px;
+    grid-template-rows: minmax(30px, auto) 1px 50px; 
+    padding-top: 15px;
 }
 .rows-essential {
     display: contents;
@@ -478,6 +479,7 @@ td.serial {
 
 td.name-table {
     grid-column: 2;
+    padding: 5px;
 }
 
 td.sets-table {
@@ -717,6 +719,7 @@ td.weights-table {
     backdrop-filter: blur(15px); /* Glassmorphism effect */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Ambient shadow */
     transform: translate(-50%, -45%); /* For the pop-up animation effect */
+    visibility: hidden;
 }
 .delete-popup .delete-heading{
     display: flex;
@@ -736,6 +739,7 @@ td.weights-table {
 }
 .delete-popup.show{
     opacity: 1;
+    visibility: visible;
     z-index: 10000;
     transform: translate(-50%, -50%); /* Settles into place */
 }

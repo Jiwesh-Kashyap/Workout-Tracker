@@ -4,6 +4,7 @@ import Lenis from 'lenis';
 import Footer from "./Footer";
 import { UserContext } from "./UserContext";
 import { Link, useNavigate } from "react-router-dom";
+import EditRoutinePopup from "./EditRoutinePopup";
 
 function Schedule() {
     const [dayName, setDayName] = useState(null);
@@ -11,10 +12,15 @@ function Schedule() {
     const [plans, setPlans] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showAuthPopup, setShowAuthPopup] = useState(false);
+    
+    const [isEditing, setIsEditing] = useState(false);
+    const [editTargetName, setEditTargetName] = useState("");
+    const [editTargetMessage, setEditTargetMessage] = useState("");
+
     const { name } = useContext(UserContext);
 
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const lenis = new Lenis({
             duration: 0.7,
@@ -49,15 +55,15 @@ function Schedule() {
                 }
                 else if (response.status === 400 || response.status === 401) {
                     console.error("Token expired or invalid!");
-                    localStorage.removeItem('token'); 
+                    localStorage.removeItem('token');
                     localStorage.removeItem('userName');
-                    navigate('/signin'); 
+                    navigate('/signin');
                 }
             }
             catch (error) {
                 console.log('schedule.jsx=> Caught an error while making request: ', error);
             }
-            finally{
+            finally {
                 setIsLoading(false);
             }
         }
@@ -83,7 +89,7 @@ function Schedule() {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
@@ -120,7 +126,7 @@ function Schedule() {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
                 method: 'DELETE',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
@@ -136,6 +142,45 @@ function Schedule() {
             setPlans(previousPlans); // Rollback
         }
     };
+    const handleEdit = async (oldName, newName, newMessage) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    prevDayName: oldName,
+                    nextDayName: newName,
+                    message: newMessage,
+                }),
+            })
+            if (response.ok) {
+                // Optimistic UI
+                setPlans(prevPlans => prevPlans.map(plan =>
+                    plan.dayName === oldName
+                        ? { ...plan, dayName: newName, message: newMessage }
+                        : plan
+                ));
+            } else {
+                console.log("Failed to edit schedule on backend");
+            }
+        } catch (err) {
+            console.log('Error while editing schedules', err);
+        }
+    }
+
+    const triggerEditForm = (oldName, oldMessage) => {
+        setEditTargetName(oldName);
+        setEditTargetMessage(oldMessage);
+        setIsEditing(true);
+    };
+
+    const handleSaveEdit = (newName, newMessage) => {
+        handleEdit(editTargetName, newName, newMessage);
+        setIsEditing(false);
+    };
 
     const planList = plans.map((item, ind) => {
         if (React.isValidElement(item)) {
@@ -143,7 +188,13 @@ function Schedule() {
         }
         return (
             <li key={item._id || ind}>
-                <DayPlan name={item.dayName} content={item.message} checker={item.checker} onDelete={handleDelete} />
+                <DayPlan 
+                    name={item.dayName} 
+                    content={item.message} 
+                    checker={item.checker} 
+                    onDelete={handleDelete} 
+                    onEdit={() => triggerEditForm(item.dayName, item.message)} 
+                />
             </li>
         );
     });
@@ -170,12 +221,27 @@ function Schedule() {
                     <div className="delete-message">
                         <p>You must be signed in to create and save a routine.</p>
                         <div className="delete-buttons" style={{ marginTop: '20px' }}>
-                            <Link to="/signin" className="delete-confirm" style={{ textDecoration: 'none', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Sign In</Link>
+                            <Link to="/signin" className="delete-confirm"
+                                style={{
+                                    textDecoration: 'none', display: 'flex',
+                                    justifyContent: 'center', alignItems: 'center'
+                                }}>
+                                Sign In</Link>
                             <button className="delete-cancel" onClick={() => setShowAuthPopup(false)}>Cancel</button>
                         </div>
                     </div>
                 </div>
             )}
+            
+            {isEditing && (
+                <EditRoutinePopup 
+                    oldName={editTargetName} 
+                    oldMessage={editTargetMessage} 
+                    onSave={handleSaveEdit} 
+                    onCancel={() => setIsEditing(false)} 
+                />
+            )}
+            
             {plans.length === 0 ? (
                 <div className="no-plan">
                     <div className="no-plan-message">

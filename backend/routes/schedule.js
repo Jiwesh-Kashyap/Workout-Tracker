@@ -50,6 +50,29 @@ router.put("/", async (req, res) => {
     console.log("routes/schedule.js-> Error while updating checker", err);
   }
 });
+
+router.patch("/", async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Invalid user!" });
+  }
+  const { prevDayName, nextDayName, message } = req.body;
+  try {
+    const plan = await Schedule.findOne({
+      dayName: prevDayName,
+      createdBy: req.user._id,
+    });
+    if (!plan) {
+      console.log("No such plan exists!");
+      return res.json(400);
+    }
+    plan.dayName = nextDayName;
+    plan.message = message;
+    await plan.save();
+    return res.status(200).json({ message: "Plan updated successfully!" });
+  } catch (error) {
+    res.status(400).json({ message: "Error while updating plan!" });
+  }
+});
 router.delete("/", async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: "Invalid user!" });

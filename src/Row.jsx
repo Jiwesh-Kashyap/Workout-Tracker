@@ -4,13 +4,9 @@ import DeleteImage from "./DeleteImage";
 import EditImage from "./EditImage";
 import Checker from "./Checker";
 
-function Row({ item, index, handleDelete, dayName }) {
+function Row({ item, index, handleDelete, dayName, onEditClick }) {
     const [isCompleted, setIsCompleted] = useState(item.completed || false);
     const [isDeleted, setIsDeleted] = useState(false);
-    const [edit, setEdit] = useState(false);
-    const [numOfSets, setNumOfSets] = useState(item.numOfSets);
-    const [numOfReps, setNumOfReps] = useState(item.numOfReps);
-    const [weight, setWeight] = useState(item.weight);
 
     useEffect(() => {
         setIsCompleted(item.completed || false);
@@ -23,7 +19,7 @@ function Row({ item, index, handleDelete, dayName }) {
     const checkerClass = (isCompleted ? 'checker-list hide' : 'checker-list');
 
     const handleComplete = async () => {
-        //Optimistic AI
+        //Optimistic UI
         const previousState = isCompleted;
         setIsCompleted(!isCompleted);
 
@@ -56,40 +52,6 @@ function Row({ item, index, handleDelete, dayName }) {
         setIsDeleted(true);
     }
 
-    const editFormClass = `delete-popup edit-form ${edit ? 'show' : ''}`;
-
-    const handleEdit = async () => {
-
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tracker/${dayName}`, {
-                method: 'PUT',
-                body: JSON.stringify({ 
-                    dayName, 
-                    intent: "EDIT_WORKOUT",
-                    name: item.exerciseName,
-                    numOfReps: numOfReps,
-                    numOfSets: numOfSets,
-                    weight: weight,
-                }),
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('token')}` 
-                },
-            })
-            if (response.ok) {
-                console.log("Workout updated successfully!");
-                const data = await response.json();
-                item.numOfReps = data.numOfReps;
-                item.numOfSets = data.numOfSets;
-                item.weight = data.weight;
-                setEdit(false);
-            }
-        }
-        catch (err) {
-            console.log("Error while updating workout!", err);
-        }
-    }
-
     const finalClassName = `rows ${isCompleted ? 'row-completed' : ''} ${isDeleted ? 'deleted' : ''}`;
 
     return (
@@ -100,29 +62,14 @@ function Row({ item, index, handleDelete, dayName }) {
             <td className='reps-table'>{item.numOfReps}</td>
             <td className='weights-table'>{item.weight}</td>
             <td id="line-div-action-cell" className="hide-hr separator-cell"></td>
+            <td className="drag-handle" style={{cursor: "grab"}}>☰</td>
             {/* We pass the handleComplete function down */}
             <td className='action-cell'>
                 <DoneImage className={doneClass} onCheckFunc={handleComplete} />
                 <DeleteImage className={deleteClass} onDelFunc={() => onDelete(item.exerciseName)} />
-                <EditImage className="edit-row" onClickFunc={() => setEdit(true)} />
+                <EditImage className="edit-row" onClickFunc={onEditClick} />
                 <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete} />
 
-                <div className={editFormClass}>
-                    <div className="delete-heading edit-heading">
-                        <p>EDIT EXERCISE</p>
-                    </div>
-                    <div className="delete-message">
-                        <div className="edit-inputs">
-                            <label>Sets: <input type="number" value={numOfSets} onChange={(e) => setNumOfSets(e.target.value)} /></label>
-                            <label>Reps: <input type="number" value={numOfReps} onChange={(e) => setNumOfReps(e.target.value)} /></label>
-                            <label>Weight: <input type="number" value={weight} onChange={(e) => setWeight(e.target.value)} /></label>
-                        </div>
-                        <div className="delete-buttons">
-                            <button className="delete-confirm edit-confirm" onClick={handleEdit}>SAVE</button>
-                            <button className="delete-cancel" onClick={() => setEdit(false)}>CANCEL</button>
-                        </div>
-                    </div>
-                </div>
             </td>
         </tr>
     );
