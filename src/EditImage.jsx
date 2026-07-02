@@ -8,8 +8,8 @@ function EditImage({ onClickFunc, className }) {
         setDisplay(!display);
     }
     
-    function handleClick() {
-        if(onClickFunc) onClickFunc();
+    function handleClick(e) {
+        if(onClickFunc) onClickFunc(e);
     }
     
     return (

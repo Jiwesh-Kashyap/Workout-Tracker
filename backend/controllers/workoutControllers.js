@@ -12,7 +12,7 @@ async function getWorkouts(req, res) {
         return res.status(404).json({ error: "Schedule not found!" });
     }
 
-    const workouts = await Workout.find({ scheduleID: schedule._id }).sort({ createdAt: 1 });    //oldest first
+    const workouts = await Workout.find({ scheduleID: schedule._id }).sort({ order: 1 });    //oldest first
     res.status(200).json(workouts);
 }
 async function resetWorkouts(req, res){
@@ -20,7 +20,7 @@ async function resetWorkouts(req, res){
 
     const { dayName } = req.params; 
     const schedule = await Schedule.findOne({ dayName, createdBy: req.user._id });
-    const workouts = await Workout.find({scheduleID: schedule._id}).sort({ createdAt: 1 });
+    const workouts = await Workout.find({scheduleID: schedule._id}).sort({ order: 1 });
 
     for (let index = 0; index < workouts.length; index++) {
         workouts[index].completed = false;
@@ -32,6 +32,21 @@ async function resetWorkouts(req, res){
 async function updateWorkout(req, res){
     const { intent } = req.body;
     if (!req.user) return res.status(401).json({ error: "Unauthorized" });
+
+    if(req.body.intent=="SORT_WORKOUT"){
+        const {dayName} = req.params;
+        const schedule = await Schedule.findOne({ dayName, createdBy: req.user._id});
+        
+        const orderOfObjectIds = req.body.orderOfObjectIds;
+
+        for(let i = 0; i < orderOfObjectIds.length; i++){
+            const currWorkout = await Workout.findById(orderOfObjectIds[i]);
+            currWorkout.order = i;
+            await currWorkout.save();
+        }
+
+        return res.status(200).json({message: 'Sorting successful in database'});
+    }
 
     if(intent==="EDIT_WORKOUT"){
         const { dayName } = req.params;

@@ -143,7 +143,7 @@ function Tracker() {
             <div id="layout">
                 <Input onAddExercise={addExercise} />
                 <hr id="divider" />
-                <Output list={plan} dayName={dayName} handleReset={handleReset} onDelete={(workoutName) => deleteExercise(workoutName)} />
+                <Output list={plan} setList={setPlan} dayName={dayName} handleReset={handleReset} onDelete={(workoutName) => deleteExercise(workoutName)} />
             </div>
             <Footer />
         </ResetContext.Provider>
