@@ -129,3 +129,90 @@
     padding: 0.8rem;
   }
 }
+
+/* --- Modal Overlay & Container --- */
+.save-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.save-modal {
+    background: linear-gradient(135deg, rgba(36, 9, 62, 0.95) 0%, rgba(20, 5, 35, 1) 100%);
+    border: 1px solid rgba(145, 28, 255, 0.3);
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: white;
+}
+
+.save-modal h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.save-modal p {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+/* --- Modal Buttons --- */
+.modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-btn {
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.save-only {
+    background-color: rgba(145, 28, 255, 0.8);
+    color: white;
+}
+.save-only:hover {
+    background-color: rgba(145, 28, 255, 1);
+}
+
+.save-update {
+    background-color: transparent;
+    border: 2px solid rgba(145, 28, 255, 0.8);
+    color: #e9d5ff;
+}
+.save-update:hover {
+    background-color: rgba(145, 28, 255, 0.2);
+}
+
+.cancel {
+    background-color: transparent;
+    color: #94a3b8;
+    margin-top: 5px;
+}
+.cancel:hover {
+    color: white;
+}
+
+.save-btn {
+    background-color: rgba(145, 28, 255, 0.6);
+}

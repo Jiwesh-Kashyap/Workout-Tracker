@@ -49,6 +49,41 @@ function Tracker() {
         };
     }, []);
 
+    useEffect(() => {
+        const handleFinishWorkout = async (e) => {
+            const { updateTemplate } = e.detail;
+            
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reports/finish`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        exercises: plan, 
+                        updateTemplate: updateTemplate
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log("Workout logged successfully!");
+                    window.dispatchEvent(new Event('workout-saved'));
+                } else {
+                    console.error("Failed to log workout");
+                }
+            } catch (error) {
+                console.error("Network error while logging:", error);
+            }
+        };
+
+        window.addEventListener('finish-workout', handleFinishWorkout);
+
+        return () => {
+            window.removeEventListener('finish-workout', handleFinishWorkout);
+        };
+    }, [plan]);
+
     async function addExercise(tableRow) {
         const workoutData = {
             exerciseName: tableRow.exerciseName,

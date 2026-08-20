@@ -7,6 +7,7 @@ const cors = require('cors');   //frontend talks to backend
 const workoutRouter = require('./routes/workoutRoutes');
 const userRouter = require('./routes/user');
 const scheduleRouter = require('./routes/schedule');
+const reportRouter = require('./routes/reportRoutes');
 
 const cookieParser = require('cookie-parser');
 const { checkForAuthenticationCookie } = require('./middleware/authn');
@@ -29,6 +30,7 @@ app.use(checkForAuthenticationCookie("token"));
 
 app.use('/tracker', workoutRouter);
 app.use('/api/user', userRouter);
+app.use('/api/reports', reportRouter);
 app.use('/', scheduleRouter);
 
 app.get('/', () => {

@@ -1122,7 +1122,10 @@ td.weights-table {
    COMPREHENSIVE RESPONSIVE DESIGN FOR MOBILE & TABLETS
    ========================================================= */
 @media (max-width: 768px) {
-    /* Navbar adjustments */
+    body::before {
+        background-image: none;
+        background: radial-gradient(circle at top left, #2a0845 0%, #1a0024 100%);
+    }
     .links {
         flex-wrap: wrap; /* Allow buttons to wrap if screen is very narrow */
         padding: 5px;
