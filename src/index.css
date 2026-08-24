@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     /* Removed color-scheme to prevent default browser dark mode overrides */
     --main-font: "Poppins", sans-serif;
@@ -856,6 +860,7 @@ td.weights-table {
 .day-plan{
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
+    padding-bottom: 8%;
     width: 70vw;
     height: 150px;
     row-gap: 20px;

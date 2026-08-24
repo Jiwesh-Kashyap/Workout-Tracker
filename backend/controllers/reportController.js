@@ -78,7 +78,8 @@ const finishWorkout = async (req, res) => {
         const { exercises, updateTemplate } = req.body;
         const userId = req.user._id;
 
-        const logsToSave = exercises.map(ex => ({
+        //iterate over each exercise
+        const logsToSave = exercises.map(ex => ({   
             exerciseName: ex.exerciseName,
             numOfSets: ex.numOfSets,
             numOfReps: ex.numOfReps,
@@ -90,7 +91,8 @@ const finishWorkout = async (req, res) => {
 
         await workoutLogModel.insertMany(logsToSave);
 
-        if(updateTemplate){
+        //update the workout if user insists
+        if(updateTemplate){ 
             for(let ex of exercises){
                 await Workout.findByIdAndUpdate(ex._id, {
                     weight: ex.weight,

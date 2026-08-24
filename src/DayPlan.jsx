@@ -46,6 +46,15 @@ function DayPlan({ name, content, checker, onDelete, onEdit }) {
             <h2 className="day-plan-h2">{name}</h2>
             <h4 className="day-plan-h4">{content}</h4>
 
+            <div className="mt-4 flex gap-2" onClick={(e) => e.stopPropagation()}>
+                <button 
+                    onClick={() => navigate(`/${name}/report`)}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition-colors shadow-sm absolute cursor-pointer"
+                >
+                    View Report
+                </button>
+            </div>
+
             {/* Container to stop the click from bubbling to the parent div */}
             <div className="day-plan-delete" onClick={(e) => e.stopPropagation()}>
                 <DeleteImage className="delete" onDelFunc={() => onDelete(name)} type="routine" />
