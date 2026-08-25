@@ -1,19 +1,20 @@
 import { useEffect } from "react";
 import {
   LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ReponsiveContainer,
+  ResponsiveContainer,
 } from "recharts";
 
 export default function ProgressChart({ data }) {
   return (
-    <div className="w-full h-64 bg-slate-900 p-4 rounded-xl shadow-lg border border-slate-800">
+    <div className="w-full min-h-[400px] bg-slate-900 p-4 rounded-xl shadow-lg border border-slate-800 flex flex-col">
       <h3 className="text-white font-semibold mb-4">Volume Over Time</h3>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
+      <div className="w-full flex justify-center mt-6">
+          <LineChart data={data} width={800} height={400}>
           <CartesianGrid
             strokeDasharray="3 3"
             stroke="#334155"
@@ -50,7 +51,7 @@ export default function ProgressChart({ data }) {
             activeDot={{ r: 6 }}
           />
         </LineChart>
-      </ResponsiveContainer>
+      </div>
     </div>
   );
 }

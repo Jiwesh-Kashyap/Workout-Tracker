@@ -6,13 +6,15 @@ const getProgressiveOverload = async (req, res) => {
     const { exerciseName } = req.query;
     const userId = req.user._id;
 
-    const history = await Workout.find({
+    const history = await workoutLogModel.find({
       createdBy: userId,
       exerciseName: exerciseName,
-      completed: true,
     })
-      .sort({ createdBy: 1 })
-      .select("weight numOfSets numOfReps createdAt");
+      .sort({ createdAt: 1 })
+      .select("weight numOfSets numOfReps createdAt exerciseName");
+
+    console.log("ExerciseName query:", exerciseName);
+    console.log("HISTORY:", history);
 
     const charData = history.map((session) => ({
       date: session.createdAt.toISOString().split("T")[0],
@@ -35,10 +37,9 @@ const comparePreviousWorkout = async (req, res) => {
     const { exerciseName } = req.query;
     const userId = req.user._id;
 
-    const recentWorkouts = await Workout.find({
+    const recentWorkouts = await workoutLogModel.find({
       createdBy: userId,
       exerciseName: exerciseName,
-      completed: true,
     })
       .sort({ createdAt: -1 })
       .limit(2);    //current and prev
