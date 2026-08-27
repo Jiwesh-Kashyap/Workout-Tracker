@@ -122,7 +122,7 @@ function Output({ list, setList, onDelete, dayName, handleReset }) {
             <button className='output-reset' onClick={() => setShowReset(true)}>
                 Reset Progress
             </button>
-            <h1>THE PLAN</h1>
+            {/* <h1>THE PLAN</h1> */}
             <br />
             <table>
                 <caption className='table-name'>PLAN 1</caption>

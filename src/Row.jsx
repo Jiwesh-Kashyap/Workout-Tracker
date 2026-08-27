@@ -3,6 +3,7 @@ import DoneImage from "./DoneImage";
 import DeleteImage from "./DeleteImage";
 import EditImage from "./EditImage";
 import Checker from "./Checker";
+import { Check } from "lucide-react";
 
 function Row({ item, index, handleDelete, dayName, onEditClick }) {
     const [isCompleted, setIsCompleted] = useState(item.completed || false);
@@ -65,7 +66,7 @@ function Row({ item, index, handleDelete, dayName, onEditClick }) {
             <td className="drag-handle" style={{cursor: "grab"}}>☰</td>
             {/* We pass the handleComplete function down */}
             <td className='action-cell'>
-                <DoneImage className={doneClass} onCheckFunc={handleComplete} />
+                <Check className={doneClass} onClick={() => setIsCompleted(true)} onCheckFunc={handleComplete} />
                 <DeleteImage className={deleteClass} onDelFunc={() => onDelete(item.exerciseName)} />
                 <EditImage className="edit-row" onClickFunc={onEditClick} />
                 <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete} />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import editImage from './assets/editImage.png';
+import { SquarePen } from 'lucide-react';
 
 function EditImage({ onClickFunc, className }) {
     const [display, setDisplay] = useState(false);
@@ -13,9 +14,8 @@ function EditImage({ onClickFunc, className }) {
     }
     
     return (
-        <div className='div-done-img'>
-            <img 
-                src={editImage} 
+        <div className='div-edit-img'>
+            <SquarePen 
                 onMouseEnter={toggleDisplay}
                 onMouseLeave={toggleDisplay} 
                 onClick={handleClick}

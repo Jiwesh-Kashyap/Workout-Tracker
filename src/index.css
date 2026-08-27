@@ -516,11 +516,14 @@ td.weights-table {
     background-color: rgba(36, 9, 62, 0.474);
 }
 
-.div-done-img {
+.div-delete-img, .div-edit-img {
     display: grid;
     place-items: center;
     position: relative;
-    /* cursor: pointer; */
+    margin: 5px;
+}
+.div-edit-img{
+    padding-right: 4px;
 }
 
 .done {
@@ -876,7 +879,7 @@ td.weights-table {
     box-shadow: 0 12px 40px rgba(145, 28, 255, 0.4);
     transform: translateY(-3px);
     border-color: rgba(255, 255, 255, 0.4);
-    cursor: pointer;
+    /* cursor: pointer; */
 } 
 .day-plan:hover .day-plan-h2{
     font-size: 2rem;

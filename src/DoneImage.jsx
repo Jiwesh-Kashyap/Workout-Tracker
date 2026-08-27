@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import doneImg from './assets/done.png';
 
 function DoneImage({onCheckFunc, className}) {   //prop should be some function
@@ -12,9 +12,9 @@ function DoneImage({onCheckFunc, className}) {   //prop should be some function
     }
   return (
     <div className='div-done-img'>
-        <img src={doneImg} onMouseEnter={toggleDisplay}
+        {/* <img src={doneImg} onMouseEnter={toggleDisplay}
             onMouseLeave={toggleDisplay} onClick={handleClick}
-            className={className} alt="done" width="20"/>
+            className={className} alt="done" width="20"/> */}
         <div className={`completed ${display?'active':''}`}><p>mark as completed</p></div>
     </div>
   );

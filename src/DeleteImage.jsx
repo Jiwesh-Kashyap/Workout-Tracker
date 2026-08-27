@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import deleteImg from './assets/delete.png';
 import DeletePopUp from './DeletePopUp';
+import {Trash} from 'lucide-react';
 
 function DeleteImage({className, onDelFunc, type = "exercise"}) {
     const [display, setDisplay] = useState(false);
@@ -19,14 +20,15 @@ function DeleteImage({className, onDelFunc, type = "exercise"}) {
 
 
     return (
-        <div className='div-done-img'>
-            <img src={deleteImg}
+        <div className='div-delete-img'>
+            <Trash
                 className={className}
                 alt="delete-button"
                 width="20"
                 onMouseEnter={toggleDisplay}
                 onMouseLeave={toggleDisplay}
-                onClick={handleClick} />
+                onClick={handleClick} 
+            />
             <div className={`completed ${display ? 'active' : ''}`}><p>delete {type}</p></div>
             <DeletePopUp varClass={`${popupDisplay ? 'show' : ''}`} onDelFunc={onDelFunc} onCancel={closePopup} type={type} />
         </div>

@@ -15,6 +15,13 @@ function Navbar({ name }) {
         setIsOpen(!isOpen);
     };
 
+    const scrollToAddPlan = () =>{
+        const formElement = document.getElementById("add-plan-section");
+        if(formElement){
+            formElement.scrollIntoView({behavior: "smooth"});
+        }
+    };
+    
     const closeMenu = () => {
         setIsOpen(false);
     };
@@ -53,10 +60,15 @@ function Navbar({ name }) {
             </div>
 
             <div className={`nav-links ${isOpen ? "open" : ""}`}>
-                {/* We can dynamically show links based on where we are, or show all */}
-                <Link to="/" className="nav-link schedule-btn" onClick={closeMenu}>
-                    Schedule
-                </Link>
+                {!(location.pathname.startsWith('/tracker') || location.pathname.endsWith('/report')) && 
+                    <button className="nav-link cursor-pointer bg-transparent" style={{fontFamily: 'inherit'}}
+                    onClick={() => {scrollToAddPlan(), closeMenu()}}>Add Plan</button>
+                }
+                {(location.pathname.startsWith('/tracker') || location.pathname.endsWith('/report') )&& 
+                    <Link to="/" className="nav-link schedule-btn" onClick={closeMenu}>
+                        Schedule
+                    </Link>
+                }
                 {name === "User" && (
                     <>
                         <Link to="/signin" className="nav-link" onClick={closeMenu}>

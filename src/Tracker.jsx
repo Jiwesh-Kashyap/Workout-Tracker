@@ -176,7 +176,7 @@ function Tracker() {
                 />
             </svg>
             <div id="layout">
-                <Input onAddExercise={addExercise} />
+                {/* <Input onAddExercise={addExercise} /> */}
                 <hr id="divider" />
                 <Output list={plan} setList={setPlan} dayName={dayName} handleReset={handleReset} onDelete={(workoutName) => deleteExercise(workoutName)} />
             </div>

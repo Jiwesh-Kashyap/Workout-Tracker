@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import { UserContext } from "./UserContext";
 import { Link, useNavigate } from "react-router-dom";
 import EditRoutinePopup from "./EditRoutinePopup";
+import { CircleArrowUp } from 'lucide-react';
 
 function Schedule() {
     const [dayName, setDayName] = useState(null);
@@ -16,6 +17,7 @@ function Schedule() {
     const [isEditing, setIsEditing] = useState(false);
     const [editTargetName, setEditTargetName] = useState("");
     const [editTargetMessage, setEditTargetMessage] = useState("");
+    const [showScroll, setShowScroll] = useState(false);
 
     const { name } = useContext(UserContext);
 
@@ -35,11 +37,18 @@ function Schedule() {
         // Start the loop
         requestAnimationFrame(raf);
 
-        // Cleanup: Destroy the instance if the component unmounts
+        lenis.on('scroll', (e) => {
+            if (e.scroll > 150) {
+                setShowScroll(true);
+            } else {
+                setShowScroll(false);
+            }
+        });
+
         return () => {
             lenis.destroy();
         };
-    }, [plans])
+    }, []);
 
 
     useEffect(() => {
@@ -116,6 +125,10 @@ function Schedule() {
             return false;
         }
         else return true;
+    }
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     const handleDelete = async (planName) => {
@@ -211,7 +224,7 @@ function Schedule() {
     }
 
     return (
-        <div className="schedule">
+        <div className="schedule relative">
             {/* AUTHENTICATION REQUIRED POPUP */}
             {showAuthPopup && (
                 <div className="delete-popup show">
@@ -252,7 +265,7 @@ function Schedule() {
                 <ul className="day-list">{planList}</ul>
             )}
 
-            <form action="/" method="POST" className="schedule-form">
+            <form id="add-plan-section" action="/" method="POST" className="schedule-form">
                 <input
                     type="text"
                     placeholder="Input day name..."
@@ -272,6 +285,15 @@ function Schedule() {
                 </button>
             </form>
             <Footer />
+
+            {showScroll && (
+                <button 
+                    onClick={scrollToTop} 
+                    className="fixed bottom-8 right-8 z-50 p-2 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 hover:scale-110 transition-all cursor-pointer"
+                >
+                    <CircleArrowUp size={32} />
+                </button>
+            )}
         </div>
     );
 }
