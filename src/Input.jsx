@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { workoutSchema } from './schema.js'; // Import your rules
 import AmountSlider from './AmountSlider';
+import { Plus } from 'lucide-react';
 
 function Input({ onAddExercise }) {
     const {
@@ -28,6 +29,8 @@ function Input({ onAddExercise }) {
     React.useEffect(() => {
         register("weights");
     }, [register]);
+
+    const [sets, setSets] = useState([ {reps: 0, weight: 0} ]);
 
     const [weights, setWeights] = useState(50);
     const [isWeighted, setIsWeighted] = useState(true);
@@ -94,15 +97,16 @@ function Input({ onAddExercise }) {
                     <p className="error-msg">{errors.exerciseName.message}</p>
                 )}
 
+                
                 {/* Sets */}
-                <label htmlFor="sets">
+                {/* <label htmlFor="sets">
                     <h3>Num of Sets: </h3>
                 </label>
                 <input  {...register("sets", { valueAsNumber: true })} placeholder='3'
                     type="number" id="sets" className='input-box' defaultValue="" />
                 {errors.sets && (
                     <p className="error-msg">{errors.sets.message}</p>
-                )}
+                )} */}
 
                 {/* Reps */}
                 <label htmlFor="reps">

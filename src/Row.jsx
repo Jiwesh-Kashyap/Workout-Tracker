@@ -3,11 +3,12 @@ import DoneImage from "./DoneImage";
 import DeleteImage from "./DeleteImage";
 import EditImage from "./EditImage";
 import Checker from "./Checker";
-import { Check } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 
 function Row({ item, index, handleDelete, dayName, onEditClick }) {
     const [isCompleted, setIsCompleted] = useState(item.completed || false);
     const [isDeleted, setIsDeleted] = useState(false);
+    const [isAddSet, setIsAddSet] = useState(false);
 
     useEffect(() => {
         setIsCompleted(item.completed || false);
@@ -62,14 +63,17 @@ function Row({ item, index, handleDelete, dayName, onEditClick }) {
             <td className='sets-table'>{item.numOfSets}</td>
             <td className='reps-table'>{item.numOfReps}</td>
             <td className='weights-table'>{item.weight}</td>
-            <td id="line-div-action-cell" className="hide-hr separator-cell"></td>
+            <td className="separator-cell"></td>
             <td className="drag-handle" style={{cursor: "grab"}}>☰</td>
             {/* We pass the handleComplete function down */}
             <td className='action-cell'>
+                <button className="border rounded-md cursor-pointer" onClick={() => setIsAddSet(!isAddSet)}>
+                    <Plus className='w-5 h-5'></Plus>
+                </button>
                 <Check className={doneClass} onClick={() => setIsCompleted(true)} onCheckFunc={handleComplete} />
                 <DeleteImage className={deleteClass} onDelFunc={() => onDelete(item.exerciseName)} />
                 <EditImage className="edit-row" onClickFunc={onEditClick} />
-                <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete} />
+                {/* <Checker className={checkerClass} sets={item.numOfSets} onComplete={handleComplete} /> */}
 
             </td>
         </tr>
