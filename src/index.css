@@ -142,9 +142,9 @@ html.lenis body {
     width: 100%;
 }
 .output-reset{
-    position: absolute;
-    top: 25px;
-    right: 0px; 
+    align-self: flex-end;
+    margin-bottom: 10px;
+    margin-right: 10px;
     cursor: pointer;
     background-color: rgba(36, 9, 62, 0.474);
     color: white;
@@ -1216,10 +1216,8 @@ td.drag-handle-table {
         word-wrap: break-word; /* Let long workout names wrap slightly */
     }
     .output-reset {
-        /* Move reset button above the table so it doesn't get lost in scroll */
-        position: relative;
-        top: 0;
-        align-self: flex-end;
+        /* Mobile specific margin tweaks if needed */
+        margin-right: 0px;
         margin-bottom: 15px;
     }
     #output table {
