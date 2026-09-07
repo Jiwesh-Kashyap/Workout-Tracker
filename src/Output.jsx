@@ -131,8 +131,7 @@ function Output({ list, setList, onDelete, dayName, handleReset }) {
                         <th className='serial'>#</th>
                         <th className='name-table'>Name</th>
                         <th className='sets-table'>Sets</th>
-                        <th className='reps-table'>Reps</th>
-                        <th className='weights-table'>Weight Used</th>
+                        <th className='action-table'>Actions</th>
                     </tr>
                 </thead>
 
@@ -150,7 +149,15 @@ function Output({ list, setList, onDelete, dayName, handleReset }) {
                     swapThreshold={0.8}
                     >
                     {list.map((item, i) => (
-                        <Row key={item._id} item={item} index={i} handleDelete={handleDelete} dayName={dayName} onEditClick={() => openEditModal(item)} />
+                        <Row 
+                            key={item._id} 
+                            item={item} 
+                            index={i} 
+                            handleDelete={handleDelete} 
+                            dayName={dayName} 
+                            onEditClick={() => openEditModal(item)} 
+                            onUpdateItem={(updatedItem) => setList(prevList => prevList.map(v => v._id === updatedItem._id ? updatedItem : v))}
+                        />
                     ))}
                 </ReactSortable>
 

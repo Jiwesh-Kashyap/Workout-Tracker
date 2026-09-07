@@ -11,18 +11,27 @@ const getProgressiveOverload = async (req, res) => {
       exerciseName: exerciseName,
     })
       .sort({ createdAt: 1 })
-      .select("weight numOfSets numOfReps createdAt exerciseName");
+      .select("sets createdAt exerciseName");
 
     console.log("ExerciseName query:", exerciseName);
     console.log("HISTORY:", history);
 
-    const charData = history.map((session) => ({
-      date: session.createdAt.toISOString().split("T")[0],
-      weight: session.weight,
-      volume: session.weight * session.numOfSets * session.numOfReps,
-      sets: session.numOfSets,
-      reps: session.numOfReps,
-    }));
+    const charData = history.map((session) => {
+      // ONLY count sets that were actually marked as completed!
+      const completedSets = session.sets.filter(set => set.completed);
+      
+      const totalVolume = completedSets.reduce((acc, set) => acc + (set.weight * set.reps), 0);
+      const totalReps = completedSets.reduce((acc, set) => acc + set.reps, 0);
+      const maxWeight = completedSets.length > 0 ? Math.max(...completedSets.map(s => s.weight)) : 0;
+      
+      return {
+        date: session.createdAt.toISOString().split("T")[0],
+        weight: maxWeight,
+        volume: totalVolume,
+        sets: completedSets.length,
+        reps: totalReps,
+      }
+    });
 
     res.status(200).json(charData);
   } catch (error) {
@@ -53,17 +62,26 @@ const comparePreviousWorkout = async (req, res) => {
     const current = recentWorkouts[0];
     const previous = recentWorkouts[1];
 
+    // Filter for completed sets only
+    const currentCompleted = current.sets.filter(s => s.completed);
+    const previousCompleted = previous.sets.filter(s => s.completed);
+
+    const currentVolume = currentCompleted.reduce((acc, set) => acc + (set.weight * set.reps), 0);
+    const previousVolume = previousCompleted.reduce((acc, set) => acc + (set.weight * set.reps), 0);
+    
+    const currentReps = currentCompleted.reduce((acc, set) => acc + set.reps, 0);
+    const previousReps = previousCompleted.reduce((acc, set) => acc + set.reps, 0);
+
+    const currentMaxWeight = currentCompleted.length > 0 ? Math.max(...currentCompleted.map(s => s.weight)) : 0;
+    const previousMaxWeight = previousCompleted.length > 0 ? Math.max(...previousCompleted.map(s => s.weight)) : 0;
+
     const comparison = {
       exerciseName: exerciseName,
       currentDate: current.createdAt,
       previousDate: previous.createdAt,
-      weightDiff: current.weight - previous.weight,
-      repsDiff:
-        current.numOfSets * current.numOfReps -
-        previous.numOfSets * previous.numOfReps,
-      volumeDiff:
-        current.weight * current.numOfSets * current.numOfReps -
-        previous.weight * previous.numOfSets * previous.numOfReps,
+      weightDiff: currentMaxWeight - previousMaxWeight,
+      repsDiff: currentReps - previousReps,
+      volumeDiff: currentVolume - previousVolume,
     };
 
     res.status(200).json(comparison);
@@ -82,9 +100,7 @@ const finishWorkout = async (req, res) => {
         //iterate over each exercise
         const logsToSave = exercises.map(ex => ({   
             exerciseName: ex.exerciseName,
-            numOfSets: ex.numOfSets,
-            numOfReps: ex.numOfReps,
-            weight: ex.weight,
+            sets: ex.sets || [],
             createdBy: userId,
             templateWorkoutId: ex._id,
             isSaved: true
@@ -96,9 +112,7 @@ const finishWorkout = async (req, res) => {
         if(updateTemplate){ 
             for(let ex of exercises){
                 await Workout.findByIdAndUpdate(ex._id, {
-                    weight: ex.weight,
-                    numOfSets: ex.numOfSets,
-                    numOfReps: ex.numOfReps
+                    sets: ex.sets || []
                 });
             }
         }

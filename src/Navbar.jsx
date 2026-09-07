@@ -34,14 +34,13 @@ function Navbar({ name }) {
         
         const handleSuccess = () => {
             setIsSaving(false);
-            setIsSaveModalOpen(false);
             window.removeEventListener('workout-saved', handleSuccess);
+            navigate('/'); // optionally redirect home after finish
         };
         window.addEventListener('workout-saved', handleSuccess);
         
         setTimeout(() => {
             setIsSaving(false);
-            setIsSaveModalOpen(false);
             window.removeEventListener('workout-saved', handleSuccess);
         }, 5000);
     };
@@ -83,10 +82,10 @@ function Navbar({ name }) {
                     <>
                         {location.pathname.startsWith('/tracker/') && (
                             <button className="nav-link save-btn" onClick={() => {
-                                setIsSaveModalOpen(true);
+                                handleSaveWorkout(false);
                                 closeMenu();
                             }}>
-                                Save Workout
+                                {isSaving ? "Finishing..." : "Finish Workout"}
                             </button>
                         )}
                     <button className="nav-link logout-btn" onClick={async () => {
@@ -118,27 +117,6 @@ function Navbar({ name }) {
                 )}
             </div>
         </nav>
-
-        {isSaveModalOpen && (
-            <div className="save-modal-overlay">
-                <div className="save-modal">
-                    <h3>Log this workout</h3>
-                    <p>How would you like to save today's session?</p>
-                    
-                    <div className="modal-buttons">
-                        <button className="modal-btn save-only" disabled={isSaving} onClick={() => handleSaveWorkout(false)}>
-                            {isSaving ? "Saving..." : "Save Workout"}
-                        </button>
-                        <button className="modal-btn save-update" disabled={isSaving} onClick={() => handleSaveWorkout(true)}>
-                            {isSaving ? "Saving..." : "Save & Update Routine"}
-                        </button>
-                        <button className="modal-btn cancel" disabled={isSaving} onClick={() => setIsSaveModalOpen(false)}>
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        )}
         </>
     );
 }

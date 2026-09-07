@@ -136,10 +136,10 @@ html.lenis body {
 
 #output {
     display: flex;
-    margin-left: 20px;
     flex-direction: column;
     align-items: center;
     position: relative;
+    width: 100%;
 }
 .output-reset{
     position: absolute;
@@ -160,6 +160,7 @@ html.lenis body {
 }
 #output table {
     font-size: 1.3rem;
+    width: 100%;
 }
 
 #divider {
@@ -377,19 +378,15 @@ textarea:focus {
     grid-column: 1/3/2/4;
     position: relative;
     /* margin-top: -5%; */
-#slider {
-    width: 250px;
-}
-
 #table-header {
     display: grid;
-    grid-template-columns: 40px 220px 90px 90px 130px;
+    grid-template-columns: 40px minmax(220px, 1fr) 90px 130px;
 }
 
 .rows {
     transition: grid-template-rows 1s ease-in-out, background-color 0.2s ease;
     display: grid;
-    grid-template-columns: 40px 220px 90px 90px 130px 1px auto;
+    grid-template-columns: 40px minmax(220px, 1fr) 90px 130px 1px auto;
     grid-template-rows: minmax(30px, auto) 1px 50px; 
     padding-top: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -474,8 +471,7 @@ textarea:focus {
 
 td.serial,
 td.sets-table,
-td.reps-table,
-td.weights-table,
+td.drag-handle-table,
 td.name-table {
     display: flex;
     flex-direction: row;
@@ -492,18 +488,16 @@ td.serial {
 td.name-table {
     grid-column: 2;
     padding: 5px;
+    align-items: flex-start;
+    flex-direction: column;
 }
 
 td.sets-table {
     grid-column: 3;
 }
 
-td.reps-table {
+td.drag-handle-table {
     grid-column: 4;
-}
-
-td.weights-table {
-    grid-column: 5;
 }
 
 #output tr {
@@ -869,6 +863,7 @@ td.weights-table {
     margin: 0;
 }
 .day-plan{
+    position: relative;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     padding-bottom: 8%;

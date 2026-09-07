@@ -6,7 +6,7 @@ function Footer(){
         <div className="footer-child">
             <div className="greet">THANK YOU FOR USING :)</div>
             <div className="handles">
-                Check these out!!
+                Connect with me here!! -&gt;
                 <a target="_blank" href="https://github.com/Jiwesh-Kashyap" className="git">Git</a>
                 <a target="_blank" href="https://www.linkedin.com/in/jiwesh-kashyap-1364b8375/" className="linked-in">LinkedIn</a>
                 <a target="_blank" href="https://discordapp.com/users/1360538351773683782" className="discord">Discord</a>

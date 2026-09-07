@@ -52,7 +52,7 @@ function DayPlan({ name, content, checker, onDelete, onEdit }) {
                 checked={check}
                 onChange={checkFn}
                 onClick={(e) => e.stopPropagation()}
-                className="w-7 h-7 appearance-none bg-white cursor-pointer border rounded-3xl border-slate-500 hover:ring-2 hover:ring-blue-500/50 transition-all checked:bg-blue-600 checked:border-blue-600 checked:bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20viewBox=%220%200%2016%2016%22%20fill=%22white%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d=%22M12.207%204.793a1%201%200%20010%201.414l-5%205a1%201%200%2001-1.414%200l-2-2a1%201%200%20011.414-1.414L6.5%209.086l4.293-4.293a1%201%200%20011.414%200z%22/%3E%3C/svg%3E')] bg-center bg-no-repeat"
+                className="w-7 h-7 appearance-none bg-white cursor-pointer border rounded-3xl border-slate-500 hover:ring-2 hover:ring-blue-500/50 transition-all checked:border-blue-600 checked:bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20viewBox=%220%200%2016%2016%22%20fill=%22white%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d=%22M12.207%204.793a1%201%200%20010%201.414l-5%205a1%201%200%2001-1.414%200l-2-2a1%201%200%20011.414-1.414L6.5%209.086l4.293-4.293a1%201%200%20011.414%200z%22/%3E%3C/svg%3E')] bg-center bg-no-repeat"
             />
             <h2 className="day-plan-h2">{name}</h2>
             <h4 className="day-plan-h4">{content}</h4>
