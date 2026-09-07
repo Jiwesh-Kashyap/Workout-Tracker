@@ -24,6 +24,9 @@ async function resetWorkouts(req, res){
 
     for (let index = 0; index < workouts.length; index++) {
         workouts[index].completed = false;
+        if(workouts[index].sets){
+            workouts[index].sets.forEach(set => set.completed = false);
+        }
         await workouts[index].save();
     }
 
@@ -59,13 +62,11 @@ async function updateWorkout(req, res){
         }
     
         const workout = await Workout.findOne({scheduleID: schedule._id, exerciseName: req.body.name});
-        workout.numOfReps = body.numOfReps;
-        workout.numOfSets = body.numOfSets;
-        workout.weight = body.weight;
+        workout.sets = body.sets;
 
         await workout.save(); // Don't forget to save to the database!
 
-        res.status(200).json({ numOfReps: body.numOfReps, numOfSets: body.numOfSets, weight: body.weight });
+        res.status(200).json({ sets: workout.sets });
     }
     else if(intent==="COMPLETE_WORKOUT"){
         const { dayName } = req.params;
@@ -84,7 +85,7 @@ async function updateWorkout(req, res){
     }
 }
 async function createWorkout(req, res) {
-    const { exerciseName, numOfSets, numOfReps, weight } = req.body;
+    const { exerciseName } = req.body;
     const { dayName } = req.params;
 
     console.log("[CONTROLLER DEBUG] createWorkout hit. Body:", req.body);
@@ -103,9 +104,7 @@ async function createWorkout(req, res) {
 
         const newWorkout = await Workout.create({
             exerciseName,
-            numOfSets,
-            numOfReps,
-            weight,
+            sets: [],
             createdBy: req.user._id,
             scheduleID: schedule._id,
         });

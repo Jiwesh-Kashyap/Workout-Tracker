@@ -1,22 +1,52 @@
 import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import "./Navbar.css";
 
 function Navbar({ name }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const { setName } = useContext(UserContext); // Grab setName from context
     const navigate = useNavigate(); // Grab navigate hook since <Navigate> is for rendering
+    const location = useLocation();
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
 
+    const scrollToAddPlan = () =>{
+        const formElement = document.getElementById("add-plan-section");
+        if(formElement){
+            formElement.scrollIntoView({behavior: "smooth"});
+        }
+    };
+    
     const closeMenu = () => {
         setIsOpen(false);
     };
 
+    const handleSaveWorkout = (updateTemplate) => {
+        setIsSaving(true);
+        window.dispatchEvent(new CustomEvent('finish-workout', { 
+            detail: { updateTemplate } 
+        }));
+        
+        const handleSuccess = () => {
+            setIsSaving(false);
+            window.removeEventListener('workout-saved', handleSuccess);
+            navigate('/'); // optionally redirect home after finish
+        };
+        window.addEventListener('workout-saved', handleSuccess);
+        
+        setTimeout(() => {
+            setIsSaving(false);
+            window.removeEventListener('workout-saved', handleSuccess);
+        }, 5000);
+    };
+
     return (
+        <>
         <nav className="navbar top">
             <div className="navbar-brand">
                 <h2 id="welcome">Welcome {name}{name !== "User" ? "," : ""}</h2>
@@ -29,10 +59,15 @@ function Navbar({ name }) {
             </div>
 
             <div className={`nav-links ${isOpen ? "open" : ""}`}>
-                {/* We can dynamically show links based on where we are, or show all */}
-                <Link to="/" className="nav-link schedule-btn" onClick={closeMenu}>
-                    Schedule
-                </Link>
+                {!(location.pathname.startsWith('/tracker') || location.pathname.endsWith('/report')) && 
+                    <button className="nav-link cursor-pointer bg-transparent" style={{fontFamily: 'inherit'}}
+                    onClick={() => {scrollToAddPlan(), closeMenu()}}>Add Plan</button>
+                }
+                {(location.pathname.startsWith('/tracker') || location.pathname.endsWith('/report') )&& 
+                    <Link to="/" className="nav-link schedule-btn" onClick={closeMenu}>
+                        Schedule
+                    </Link>
+                }
                 {name === "User" && (
                     <>
                         <Link to="/signin" className="nav-link" onClick={closeMenu}>
@@ -44,6 +79,15 @@ function Navbar({ name }) {
                     </>
                 )}
                 {name !== "User" && (
+                    <>
+                        {location.pathname.startsWith('/tracker/') && (
+                            <button className="nav-link save-btn" onClick={() => {
+                                handleSaveWorkout(false);
+                                closeMenu();
+                            }}>
+                                {isSaving ? "Finishing..." : "Finish Workout"}
+                            </button>
+                        )}
                     <button className="nav-link logout-btn" onClick={async () => {
                         try {
                             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user/logout`, {
@@ -69,9 +113,11 @@ function Navbar({ name }) {
                     }}>
                         Log Out
                     </button>
+                    </>
                 )}
             </div>
         </nav>
+        </>
     );
 }
 

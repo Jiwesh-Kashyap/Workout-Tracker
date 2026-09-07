@@ -1,22 +1,17 @@
 const mongoose = require('mongoose');
 
+const setSchema = new mongoose.Schema({
+    reps: {type: Number, required: true},
+    weight: {type: Number, required: true},
+    completed: {type: Boolean, default: false}
+});
+
 const workoutSchema = mongoose.Schema({
     exerciseName: {
         type: String,
         required: true
     },
-    numOfSets: {
-        type: Number,
-        required: true
-    },
-    numOfReps: {
-        type: Number,
-        required: true
-    },
-    weight: {
-        type: Number,
-        required: true
-    },
+    sets: [setSchema],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",

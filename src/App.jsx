@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Schedule from "./Schedule";
 import Navbar from "./Navbar";
 import { UserContext } from "./UserContext";
+import ReportPage from "./ReportPage";
 
 function App() {
   const [name, setName] = useState("User");
@@ -32,6 +33,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Schedule />} />
           <Route path="/tracker/:dayName" element={<Tracker/>}/>
+          <Route path="/:dayName/report" element={<ReportPage />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
