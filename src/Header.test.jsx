@@ -19,3 +19,14 @@ test('check for id', () => {
     const h2Element = screen.getByText(/pull day plan/i);
     expect(h2Element.parentElement).toHaveAttribute('id','heading');
 })
+
+test('renders the day name as a level 2 heading', () =>{
+    render(<Header dayName = "Pull Day"/>);
+
+    const headingElement = screen.getByRole('heading', {
+        name: /pull day plan/i,
+        level: 2
+    });
+
+    expect(headingElement).toBeInTheDocument();
+})
