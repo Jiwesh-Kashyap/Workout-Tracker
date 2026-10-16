@@ -103,7 +103,7 @@ function Row({ item, index, handleDelete, dayName, onEditClick, onUpdateItem }) 
     const finalClassName = `rows ${isCompleted ? 'row-completed' : ''} ${isDeleted ? 'deleted' : ''}`;
 
     return (
-        <tr className={finalClassName}>
+        <tr className={finalClassName} name='row'>
             <td className='serial'>{index + 1}</td>
             <td className='name-table'>
                 <span className="text-lg">{item.exerciseName}</span>
@@ -163,7 +163,7 @@ function Row({ item, index, handleDelete, dayName, onEditClick, onUpdateItem }) 
             
             {/* Action cell handles completing, deleting, editing */}
             <td className='action-cell'>
-                <button className="border border-slate-600 bg-slate-800/50 hover:bg-slate-700 rounded-md cursor-pointer p-1 transition-colors" onClick={() => setIsAddSet(!isAddSet)}>
+                <button aria-label="Add set" className="border border-slate-600 bg-slate-800/50 hover:bg-slate-700 rounded-md cursor-pointer p-1 transition-colors" onClick={() => setIsAddSet(!isAddSet)}>
                     <Plus className='w-5 h-5 text-blue-400'></Plus>
                 </button>
                 <Check className={doneClass} onClick={() => setIsCompleted(true)} onCheckFunc={handleComplete} />
