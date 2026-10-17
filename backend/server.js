@@ -37,7 +37,8 @@ app.get('/', () => {
     res.json({ message: 'Welcome to workout tracker app.' });
 })
 
-mongoose.connect(process.env.MONGO_URI)
+if(process.env.NODE_ENV !== 'test'){
+    mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         const port = process.env.PORT || 4000;
         // Only start listening once we are connected to the DB
@@ -48,3 +49,5 @@ mongoose.connect(process.env.MONGO_URI)
     .catch((error) => {
         console.log(error);
     });
+}
+module.exports = app;

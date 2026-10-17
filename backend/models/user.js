@@ -55,6 +55,6 @@ userSchema.static(
     }
 );
 
-const USER = mongoose.model("user", userSchema);
+const USER = mongoose.models.user || mongoose.model("user", userSchema);
 
 module.exports = USER;
