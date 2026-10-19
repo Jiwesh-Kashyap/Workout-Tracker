@@ -27,6 +27,7 @@ function Navbar({ name }) {
     };
 
     const handleSaveWorkout = (updateTemplate) => {
+        if (isSaving) return;
         setIsSaving(true);
         window.dispatchEvent(new CustomEvent('finish-workout', { 
             detail: { updateTemplate } 
@@ -35,7 +36,6 @@ function Navbar({ name }) {
         const handleSuccess = () => {
             setIsSaving(false);
             window.removeEventListener('workout-saved', handleSuccess);
-            navigate('/'); // optionally redirect home after finish
         };
         window.addEventListener('workout-saved', handleSuccess);
         
@@ -81,10 +81,14 @@ function Navbar({ name }) {
                 {name !== "User" && (
                     <>
                         {location.pathname.startsWith('/tracker/') && (
-                            <button className="nav-link save-btn" onClick={() => {
-                                handleSaveWorkout(false);
-                                closeMenu();
-                            }}>
+                            <button 
+                                className="nav-link save-btn cursor-pointer" 
+                                disabled={isSaving}
+                                onClick={() => {
+                                    handleSaveWorkout(false);
+                                    closeMenu();
+                                }}
+                            >
                                 {isSaving ? "Finishing..." : "Finish Workout"}
                             </button>
                         )}

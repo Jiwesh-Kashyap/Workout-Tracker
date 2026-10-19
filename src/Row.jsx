@@ -4,6 +4,7 @@ import DeleteImage from "./DeleteImage";
 import EditImage from "./EditImage";
 import Checker from "./Checker";
 import { Check, Plus } from "lucide-react";
+import { getSetTypeInfo } from "./setTypes";
 
 function Row({ item, index, handleDelete, dayName, onEditClick, onUpdateItem }) {
     const [isCompleted, setIsCompleted] = useState(item.completed || false);
@@ -12,6 +13,8 @@ function Row({ item, index, handleDelete, dayName, onEditClick, onUpdateItem }) 
 
     const [newReps, setNewReps] = useState("");
     const [newWeight, setNewWeight] = useState("");
+
+    const setTypeInfo = getSetTypeInfo(item.setType);
 
     // Store the initial sets from the template as "previous" reference
     const prevSetsRef = React.useRef(item.sets ? JSON.parse(JSON.stringify(item.sets)) : []);
@@ -106,12 +109,22 @@ function Row({ item, index, handleDelete, dayName, onEditClick, onUpdateItem }) 
         <tr className={finalClassName} name='row'>
             <td className='serial'>{index + 1}</td>
             <td className='name-table'>
-                <span className="text-lg">{item.exerciseName}</span>
+                <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-lg font-medium text-white">{item.exerciseName}</span>
+                    {setTypeInfo && (
+                        <span 
+                            className={`px-2 py-0.5 text-[0.68rem] tracking-wide font-medium rounded-full border shadow-sm ${setTypeInfo.badgeColor}`}
+                            title={setTypeInfo.description}
+                        >
+                            {setTypeInfo.shortTag}
+                        </span>
+                    )}
+                </div>
                 <div className={`mt-2 text-sm text-gray-300 w-full overflow-hidden transition-all duration-300 ${isCompleted ? 'max-h-0 opacity-0' : 'max-h-[1000px] opacity-100'}`}>
                     {item.sets && item.sets.map((set, idx) => {
                         const prevSet = prevSetsRef.current[idx];
                         return (
-                            <div key={idx} className={`flex gap-3 border-t border-slate-700/50 py-2 items-center ${set.completed ? 'bg-green-900/20' : ''}`}>
+                            <div key={idx} className={`flex flex-wrap gap-x-3 gap-y-1.5 border-t border-slate-700/50 py-2 items-center ${set.completed ? 'bg-green-900/20' : ''}`}>
                                 <span className="w-10 text-gray-400 font-medium text-xs">Set {idx + 1}</span>
                                 
                                 <span className="w-20 text-[0.65rem] text-slate-500 leading-tight">
@@ -147,7 +160,7 @@ function Row({ item, index, handleDelete, dayName, onEditClick, onUpdateItem }) 
                     })}
                     
                     {isAddSet && (
-                        <div className="flex gap-2 mt-2 items-center bg-slate-800/50 p-2 rounded-lg">
+                        <div className="flex flex-wrap gap-2 mt-2 items-center bg-slate-800/50 p-2 rounded-lg">
                             <input type="number" placeholder="Reps" value={newReps} onChange={e => setNewReps(e.target.value)} className="w-16 p-1 bg-slate-900 border border-slate-700 rounded text-white text-sm outline-none focus:border-blue-500" />
                             <input type="number" placeholder="Weight" value={newWeight} onChange={e => setNewWeight(e.target.value)} className="w-16 p-1 bg-slate-900 border border-slate-700 rounded text-white text-sm outline-none focus:border-blue-500" />
                             <span className="text-xs text-gray-400 mr-2">kg</span>

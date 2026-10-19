@@ -37,6 +37,31 @@ test("rendered correctly with exercise name and index", () => {
   expect(screen.getByText("lat pull downs")).toBeInTheDocument();
 });
 
+test("renders setType badge when setType is present", () => {
+  const item = {
+    exerciseName: "lateral raises",
+    setType: "Partials",
+    sets: [],
+  };
+  render(
+    <table>
+      <tbody>
+        <Row
+          item={item}
+          index={0}
+          handleDelete={vi.fn()}
+          dayName="Shoulder Day"
+          onEditClick={vi.fn()}
+          onUpdateItem={vi.fn()}
+        />
+      </tbody>
+    </table>,
+  );
+
+  expect(screen.getByText("lateral raises")).toBeInTheDocument();
+  expect(screen.getByText("Partials")).toBeInTheDocument();
+});
+
 //tests for all the functions
 
 

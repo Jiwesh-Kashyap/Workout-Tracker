@@ -11,6 +11,11 @@ const workoutSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    setType: {
+        type: String,
+        default: "Standard",
+        trim: true
+    },
     sets: [setSchema],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

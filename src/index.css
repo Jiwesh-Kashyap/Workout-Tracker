@@ -204,8 +204,10 @@ html.lenis body {
 }
 
 #input input[type="text"],
-#input input[type="number"] {
+#input input[type="number"],
+#input select {
     height: 70%;
+    min-height: 44px;
     font-size: 1.2rem;
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -386,7 +388,7 @@ textarea:focus {
 .rows {
     transition: grid-template-rows 1s ease-in-out, background-color 0.2s ease;
     display: grid;
-    grid-template-columns: 40px minmax(220px, 1fr) 90px 130px 1px auto;
+    grid-template-columns: 40px minmax(220px, 1fr) 90px 130px;
     grid-template-rows: minmax(30px, auto) 1px 50px; 
     padding-top: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -467,6 +469,8 @@ textarea:focus {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 td.serial,
@@ -490,6 +494,7 @@ td.name-table {
     padding: 5px;
     align-items: flex-start;
     flex-direction: column;
+    min-width: 0;
 }
 
 td.sets-table {
@@ -1188,24 +1193,31 @@ td.drag-handle-table {
         font-size: 1rem;
     }
 
-    /* Output Table (Horizontal Scroll for Mobile) */
+    /* Output Table (Responsive for Mobile) */
     #output {
         margin-left: 0; 
         width: 100%;
         padding-bottom: 20px;
+        overflow-x: auto;
     }
     
     #table-header {
-        /* Dramatically reduce the pixel widths of the text columns while letting the name flex */
-        grid-template-columns: 30px 1fr 50px 50px 70px; 
+        /* Match the 4 table columns: #, Name, Sets, and Drag handle */
+        grid-template-columns: 30px minmax(0, 1fr) 50px 50px; 
+        width: 100%;
+        box-sizing: border-box;
     }
     .rows {
-        /* Shrink the action cell heavily and resize data columns to match header */
-        grid-template-columns: 30px 1fr 50px 50px 70px 1px auto;
+        /* 4 columns exactly matching header, preventing blowout beyond table container */
+        grid-template-columns: 30px minmax(0, 1fr) 50px 50px;
+        width: 100%;
+        box-sizing: border-box;
     }
     .action-cell {
-        gap: 3px;
-        grid-template-columns: 1fr 1fr 1fr;
+        gap: 5px;
+        grid-template-columns: repeat(4, 1fr);
+        width: 100%;
+        box-sizing: border-box;
     }
     
     td.sets-table, td.reps-table, td.weights-table {
@@ -1246,7 +1258,7 @@ td.drag-handle-table {
     /* Action cells (done, delete, edit buttons) */
     .action-cell {
         gap: 5px;
-        grid-template-columns: 1fr 1fr 1fr 2fr;
+        grid-template-columns: repeat(4, 1fr);
     }
 
     /* Schedule Form Responsive Makeover */

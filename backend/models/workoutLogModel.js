@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const workoutLogSchema = mongoose.Schema(
   {
     exerciseName: { type: String, required: true },
+    setType: { type: String, default: "Standard" },
     sets: [{
       reps: { type: Number, required: true },
       weight: { type: Number, required: true },

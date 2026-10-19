@@ -62,11 +62,19 @@ async function updateWorkout(req, res){
         }
     
         const workout = await Workout.findOne({scheduleID: schedule._id, exerciseName: req.body.name});
-        workout.sets = body.sets;
+        if (!workout) {
+            return res.status(404).json({ error: "Workout not found!" });
+        }
+        if (body.sets !== undefined) {
+            workout.sets = body.sets;
+        }
+        if (body.setType !== undefined) {
+            workout.setType = body.setType;
+        }
 
         await workout.save(); // Don't forget to save to the database!
 
-        res.status(200).json({ sets: workout.sets });
+        res.status(200).json({ sets: workout.sets, setType: workout.setType });
     }
     else if(intent==="COMPLETE_WORKOUT"){
         const { dayName } = req.params;
@@ -85,7 +93,7 @@ async function updateWorkout(req, res){
     }
 }
 async function createWorkout(req, res) {
-    const { exerciseName } = req.body;
+    const { exerciseName, setType } = req.body;
     const { dayName } = req.params;
 
     console.log("[CONTROLLER DEBUG] createWorkout hit. Body:", req.body);
@@ -104,6 +112,7 @@ async function createWorkout(req, res) {
 
         const newWorkout = await Workout.create({
             exerciseName,
+            setType: setType || "Standard",
             sets: [],
             createdBy: req.user._id,
             scheduleID: schedule._id,

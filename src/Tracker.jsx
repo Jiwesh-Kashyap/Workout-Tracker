@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Lenis from 'lenis';
 import Input from './Input';
@@ -7,12 +7,15 @@ import Output from './Output';
 import Footer from './Footer';
 import { ResetContext } from './ResetContext';
 import { Plus, X } from 'lucide-react';
+import WorkoutCompletionModal from './WorkoutCompletionModal';
 
 function Tracker() {
     const [plan, setPlan] = useState([]);
     const [globalReset, setGlobalReset] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
     const { dayName } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchWorkouts = async () => {
@@ -53,7 +56,7 @@ function Tracker() {
 
     useEffect(() => {
         const handleFinishWorkout = async (e) => {
-            const { updateTemplate } = e.detail;
+            const { updateTemplate } = e.detail || {};
             
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reports/finish`, {
@@ -70,12 +73,28 @@ function Tracker() {
                 
                 if (response.ok) {
                     console.log("Workout logged successfully!");
+                    // 1. Automatically reset all exercises and sets in local state
+                    const resetPlan = plan.map(workout => ({
+                        ...workout,
+                        completed: false,
+                        status: "pending",
+                        sets: workout.sets ? workout.sets.map(s => ({ ...s, completed: false })) : []
+                    }));
+                    setPlan(resetPlan);
+                    setGlobalReset(true);
+
+                    // 2. Open confirmation modal to clearly notify user
+                    setIsCompletionModalOpen(true);
+
+                    // 3. Notify navbar to clear saving state
                     window.dispatchEvent(new Event('workout-saved'));
                 } else {
                     console.error("Failed to log workout");
+                    alert("Failed to save workout. Please try again.");
                 }
             } catch (error) {
                 console.error("Network error while logging:", error);
+                alert("Network error while saving workout. Please check your connection.");
             }
         };
 
@@ -99,7 +118,8 @@ function Tracker() {
 
     async function addExercise(tableRow) {
         const workoutData = {
-            exerciseName: tableRow.exerciseName
+            exerciseName: tableRow.exerciseName,
+            setType: tableRow.setType || "Standard"
         };
 
         try {
@@ -228,6 +248,20 @@ function Tracker() {
             >
                 <Plus size={28} />
             </button>
+
+            {/* Workout Completion Modal */}
+            <WorkoutCompletionModal
+                isOpen={isCompletionModalOpen}
+                dayName={dayName}
+                onClose={() => {
+                    setIsCompletionModalOpen(false);
+                    navigate('/');
+                }}
+                onViewReport={() => {
+                    setIsCompletionModalOpen(false);
+                    navigate(`/${dayName}/report`);
+                }}
+            />
 
             <Footer />
             </div>

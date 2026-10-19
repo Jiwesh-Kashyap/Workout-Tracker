@@ -100,6 +100,7 @@ const finishWorkout = async (req, res) => {
         //iterate over each exercise
         const logsToSave = exercises.map(ex => ({   
             exerciseName: ex.exerciseName,
+            setType: ex.setType || "Standard",
             sets: ex.sets || [],
             createdBy: userId,
             templateWorkoutId: ex._id,
@@ -108,16 +109,29 @@ const finishWorkout = async (req, res) => {
 
         await workoutLogModel.insertMany(logsToSave);
 
-        //update the workout if user insists
-        if(updateTemplate){ 
-            for(let ex of exercises){
-                await Workout.findByIdAndUpdate(ex._id, {
-                    sets: ex.sets || []
-                });
+        // Automatically reset the exercises and their sets so progress is cleared for the next workout
+        for (let ex of exercises) {
+            if (ex._id) {
+                const workout = await Workout.findById(ex._id);
+                if (workout) {
+                    workout.completed = false;
+                    if (updateTemplate && ex.sets) {
+                        workout.sets = ex.sets.map(s => ({
+                            reps: s.reps,
+                            weight: s.weight,
+                            completed: false
+                        }));
+                    } else if (workout.sets) {
+                        workout.sets.forEach(s => {
+                            s.completed = false;
+                        });
+                    }
+                    await workout.save();
+                }
             }
         }
 
-        res.status(200).json({message: "Workout saved successfully! "});
+        res.status(200).json({ message: "Workout saved successfully! " });
     } catch(error){
         res.status(500).json({ error: error.message });
     }

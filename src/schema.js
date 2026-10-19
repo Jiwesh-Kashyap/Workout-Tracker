@@ -13,6 +13,8 @@ export const workoutSchema = z.object({
         .min(2, "Exercise name must be at least 2 characters long")
         .max(50, "Exercise name must be at most 50 characters long"),
 
+    setType: z.string().optional(),
+
     weights: z.preprocess(preprocessNumber, z.coerce.number({ invalid_type_error: "Weight must be a number" })
         .min(0, "Weight cannot be a negative")),
 

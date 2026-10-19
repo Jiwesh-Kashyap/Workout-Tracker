@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { workoutSchema } from './schema.js'; // Import your rules
 import AmountSlider from './AmountSlider';
 import { Plus } from 'lucide-react';
+import { SET_TYPES } from './setTypes';
 
 function Input({ onAddExercise }) {
     const {
@@ -13,7 +14,8 @@ function Input({ onAddExercise }) {
         formState: { errors, isSubmitting },
     } = useForm({
         defaultValues: {
-            exerciseName: ""
+            exerciseName: "",
+            setType: "Standard"
         },
         mode: 'onTouched', // Only validate after user has interacted with the field
         reValidateMode: 'onChange', // Re-validate on change after first validation
@@ -27,7 +29,8 @@ function Input({ onAddExercise }) {
         try {
             await onAddExercise(data);
             reset({
-                exerciseName: ""
+                exerciseName: "",
+                setType: "Standard"
             }, {
                 keepErrors: false,
                 keepDirty: false,
@@ -56,6 +59,23 @@ function Input({ onAddExercise }) {
                 {errors.exerciseName && (
                     <p className="error-msg">{errors.exerciseName.message}</p>
                 )}
+
+                {/* Set Type */}
+                <label htmlFor="setType">
+                    <h3>Set type: </h3>
+                </label>
+                <select
+                    {...register("setType")}
+                    id="setType"
+                    className="input-box bg-slate-900 text-white cursor-pointer"
+                    defaultValue="Standard"
+                >
+                    {SET_TYPES.map(type => (
+                        <option key={type.value} value={type.value} className="bg-slate-900 text-white">
+                            {type.label}
+                        </option>
+                    ))}
+                </select>
 
                 <button
                     className='enter-button'

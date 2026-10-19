@@ -30,3 +30,26 @@ test("submits exercise name when form is submitted", async () => {
     );
   });
 });
+
+test("submits selected setType when changed", async () => {
+  const onAddExercise = vi.fn().mockResolvedValue(true);
+  render(<Input onAddExercise={onAddExercise} />);
+
+  const input = screen.getByPlaceholderText(/Bench Press/i);
+  const select = screen.getByRole("combobox");
+  const submitBtn = screen.getByRole("button", { name: /Add Workout/i });
+
+  fireEvent.change(input, { target: { value: "Incline Press" } });
+  fireEvent.change(select, { target: { value: "Partials" } });
+  fireEvent.click(submitBtn);
+
+  await waitFor(() => {
+    expect(onAddExercise).toHaveBeenCalledWith(
+      expect.objectContaining({
+        exerciseName: "Incline Press",
+        setType: "Partials",
+      }),
+    );
+  });
+});
+

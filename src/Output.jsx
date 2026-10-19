@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Row from './Row';
 import ResetPopUp from './ResetPopUp';
 import { ReactSortable } from 'react-sortablejs';
+import { SET_TYPES } from './setTypes';
 
 function Output({ list, setList, onDelete, dayName, handleReset }) {
     const [showReset, setShowReset] = useState(false);
@@ -10,12 +11,14 @@ function Output({ list, setList, onDelete, dayName, handleReset }) {
     const [editSets, setEditSets] = useState("");
     const [editReps, setEditReps] = useState("");
     const [editWeight, setEditWeight] = useState("");
+    const [editSetType, setEditSetType] = useState("Standard");
 
     const openEditModal = (item) => {
         setEditingItem(item);
-        setEditSets(item.numOfSets);
-        setEditReps(item.numOfReps);
-        setEditWeight(item.weight);
+        setEditSetType(item.setType || "Standard");
+        setEditSets(item.numOfSets || "");
+        setEditReps(item.numOfReps || "");
+        setEditWeight(item.weight || "");
     };
 
     const handleDelete = async (workoutName) => {
@@ -44,6 +47,7 @@ function Output({ list, setList, onDelete, dayName, handleReset }) {
                     dayName, 
                     intent: "EDIT_WORKOUT",
                     name: editingItem.exerciseName,
+                    setType: editSetType,
                     numOfReps: editReps,
                     numOfSets: editSets,
                     weight: editWeight,
@@ -58,7 +62,7 @@ function Output({ list, setList, onDelete, dayName, handleReset }) {
                 // Properly update React state instead of mutating the prop
                 setList(prevList => prevList.map(item => 
                     item.exerciseName === editingItem.exerciseName 
-                        ? { ...item, numOfReps: data.numOfReps, numOfSets: data.numOfSets, weight: data.weight } 
+                        ? { ...item, setType: data.setType || editSetType, numOfReps: data.numOfReps, numOfSets: data.numOfSets, weight: data.weight } 
                         : item
                 ));
                 setEditingItem(null);
@@ -107,6 +111,20 @@ function Output({ list, setList, onDelete, dayName, handleReset }) {
             </div>
             <div className="delete-message">
                 <div className="edit-inputs">
+                    <label className="flex flex-col gap-1 text-xs text-slate-300">
+                        Set Type: 
+                        <select 
+                            value={editSetType} 
+                            onChange={(e) => setEditSetType(e.target.value)}
+                            className="bg-slate-900 border border-slate-700 text-white rounded p-1.5 text-xs outline-none focus:border-blue-500"
+                        >
+                            {SET_TYPES.map(type => (
+                                <option key={type.value} value={type.value} className="bg-slate-900 text-white">
+                                    {type.label}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
                     <label>Sets: <input type="number" value={editSets} onChange={(e) => setEditSets(e.target.value)} /></label>
                     <label>Reps: <input type="number" value={editReps} onChange={(e) => setEditReps(e.target.value)} /></label>
                     <label>Weight: <input type="number" value={editWeight} onChange={(e) => setEditWeight(e.target.value)} /></label>
